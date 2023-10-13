@@ -2,7 +2,25 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+@import "../styles/components/NavigationBar.css";
+
 :root {
+  --font-primary-light: NunitoSans-light;
+  --font-primary-regular: NunitoSans-regular;
+  --bg-cyan-light: #ecf0f4;
+  --bg-gray: rgb(179, 179, 179);
+  --bg-gray-bold: rgba(0, 0, 0, 0.07);
+  --bg-primary: #f4f3ec;
+  --bg-secondary: white;
+  --cl-primary: #e3563d;
+  --cl-secondary: #333;
+  --bg-danger: rgb(255, 43, 43);
+  --txt-primary: white;
+  --txt-secondary: #333333;
+  --txt-gray: #54667a;
+  --border-radius-card: 8px;
+  --border-radius-btn: 50px;
+  --border-radius-input: 16px;
 }
 
 * {
@@ -15,6 +33,37 @@ html {
 
 /* fonts */
 @font-face {
-  font-family: "";
-  src: url();
+  font-family: NunitoSans-regular;
+  src: url('/fonts/NunitoSans-Regular.ttf');
+}
+
+@font-face {
+  font-family: NunitoSans-light;
+  src: url('/fonts/NunitoSans-Light.ttf');
+}
+
+/* buttons */
+.btn-secondary{
+  @apply bg-transparent;
+  color: var(--txt-secondary);
+  border: 1px solid var(--txt-secondary);
+  border-radius: var(--border-radius-btn);
+}
+
+.btn-sz-medium{
+  @apply py-[7px] pr-[25px] pl-[10px];
+}
+
+.btn-st-bold{
+  border: 2px solid var(--txt-secondary);
+  font-family: var(--font-primary-regular);
+  font-weight: bolder ;
+  font-size: 1.4rem;
+}
+
+.btn-type-select{
+  appearance: none;
+  background: url("/images/arrow.svg") no-repeat;
+  background-size: 9px;
+  background-position: calc(100% - 10px) 50%;
 }

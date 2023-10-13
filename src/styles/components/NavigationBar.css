@@ -1,0 +1,86 @@
+@layer components {
+    .navbar_wrapper{
+        @apply w-full fixed top-0;
+        box-shadow: -1px 4px 9px 0px rgba(0, 0, 0, 0.08);
+    }
+
+    .navbar_container{
+        @apply mx-[36px] px-[25px];
+    }
+
+    .navbar{
+        @apply flex items-center;
+    }
+
+    .navbar-logo{
+        @apply w-[100px] h-[80px];
+    }
+
+    .navbar-categories_wrapper{
+        @apply flex-grow;
+    }
+
+    .navbar-categories{
+        @apply flex pl-[30px];
+        list-style: none;
+        font-size: 1.6rem;
+        font-family: var(--font-primary-light);
+        color: var(--txt-secondary);
+    }
+
+    .navbar-category{
+        @apply py-[22px] pr-[30px] relative;
+        transition: all ease-in-out 0.15s;
+        cursor: pointer;
+
+        &.active{
+            font-weight: bolder;
+        }
+
+        &.active::after{
+            @apply absolute h-[2px] w-[calc(100%-30px)] bottom-0 left-0;
+            content: "";
+            background: var(--cl-primary) !important;
+        }
+
+        &::after {
+            @apply absolute h-[2px] w-0 bottom-0 left-0;
+            content: "";
+            background: linear-gradient(90deg, rgba(227, 86, 61, 1) 1%, rgba(254, 112, 110, 1) 44%, rgba(255, 206, 206, 1) 100%);
+            transition: all ease-in-out 0.15s;
+            margin: auto;
+        }
+
+        &:hover{
+            &::after{
+                @apply w-[calc(100%-30px)];
+            }
+        }
+    }
+
+    .navbar-menus{
+        @apply flex flex-wrap items-center gap-[15px];
+        font-family: var(--font-primary-regular);
+        font-size: 1.2rem;
+        font-weight: bolder;
+        .navbar-menu{
+            @apply flex flex-wrap items-center;
+            svg{
+                font-size: 2.2rem;
+            }
+        }
+    }
+
+    .navbar-menu_figure {
+        @apply relative;
+
+        &::before{
+            @apply absolute block w-[15px] h-[15px] top-[-5px] right-[-5px] text-center;
+            content: attr(data-content);
+            border-radius: 50%;
+            background-color: var(--cl-primary);
+            z-index: 2;
+            color: var(--txt-primary)
+        }
+    }
+}
