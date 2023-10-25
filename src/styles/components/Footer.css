@@ -1,0 +1,36 @@
+@layer components{
+    .footer_wrapper{
+        @apply pt-[60px] pb-[35px] bg-[var(--bg-primary)];
+    }
+
+    .footer{
+        @apply px-[15px] mx-[36px] flex bg-[var(--bg-primary)];
+    }
+
+    .footer_row{
+        @apply w-full flex justify-between items-start;
+    }
+
+    .footer_col{
+        @apply flex flex-col;
+        font-family: var(--font-primary-light);
+
+        .footer_col_title{
+            @apply mb-[20px];
+            font-size: 1.6rem;
+            font-family: var(--font-primary-regular);
+        }
+        
+        p{
+            font-size: 1.4rem;
+        }
+    }
+
+    .footer-primary{
+        @apply max-w-[423px];
+
+        p{
+            font-weight: lighter;
+        }
+    }
+}

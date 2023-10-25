@@ -1,0 +1,53 @@
+@layer components {
+    .card_wrapper.medium{
+        @apply w-[275px];
+        border: 1px solid var(--cl-primary);
+        border-radius: var(--border-radius-card);
+    }
+
+    .card{
+        @apply w-full flex flex-col;
+
+        .card_image_wrapper{
+            @apply w-full relative;
+            border-radius: var(--border-radius-image);
+
+            .card_image{
+                @apply w-full;
+                border-radius: var(--border-radius-image);
+            }
+
+            .card_label{
+                @apply absolute py-[5px] px-[12px] bg-[var(--bg-secondary)] top-[16px] left-[19px];
+                font-size: 1.2rem;
+                font-family: var(--font-primary-regular);
+                font-weight: bolder;
+                border-radius: var(--border-radius-btn);
+            }
+        }
+
+        .card_content{
+            @apply w-full pt-[20px] px-[10px] pb-[15px];
+            overflow: hidden;
+
+            .card_content_title{
+                @apply my-[15px];
+                font-size: 1.8rem;
+                font-family: var(--font-primary-regular);
+                font-weight: bolder;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
+            }
+
+            .card_content_subtitle{
+                font-size: 1.4rem;
+                font-family: var(--font-primary-light);
+            }
+        }
+
+        .card_action{
+            @apply w-full px-[10px] pb-[20px];
+        }
+    }
+}

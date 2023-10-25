@@ -1,7 +1,8 @@
 @layer components {
     .navbar_wrapper{
-        @apply w-full fixed top-0;
+        @apply w-full fixed top-0 bg-[var(--bg-secondary)];
         box-shadow: -1px 4px 9px 0px rgba(0, 0, 0, 0.08);
+        z-index: 4;
     }
 
     .navbar_container{

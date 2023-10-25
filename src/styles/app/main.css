@@ -1,0 +1,219 @@
+@layer components {
+    .hero_wrapper{
+        @apply w-full pb-[80px];
+        z-index: 2;
+    }
+
+    .hero{
+        @apply flex;
+    }
+
+    .hero_content{
+        @apply w-1/2 pl-[15px];
+        font-family: var(--font-primary-regular);
+        z-index: 2;
+
+        .hero_content_title{
+            @apply mb-[26px];
+            font-size: 5.1rem;
+            font-weight: bolder
+        }
+
+        .hero_form_wrapper{
+            @apply mr-[-145px] bg-[var(--bg-secondary)];
+            border-radius: var(--border-radius-input);
+
+            .hero_form{
+                @apply p-[20px];
+            }
+        }
+    }
+
+    .hero_image_wrapper{
+        @apply w-1/2;
+        z-index: 1;
+
+        .hero_image{
+            @apply w-full;
+        }
+    }
+
+    .card_subscribe_wrapper{
+        @apply w-full bg-[--cl-primary] relative pr-[50px] mt-[-80px];
+        border-radius: var(--border-radius-input) 0px 0px var(--border-radius-input);
+
+        .card_subscribe{
+            @apply w-full flex py-[35px] px-[40px];
+            font-family: var(--font-primary-regular);
+            color: var(--txt-primary);
+
+            .card_subscribe_title{
+                @apply w-4/12;
+                font-size: 2.2rem;
+                color: var(--txt-secondary);
+
+                span{
+                    color: var(--txt-primary);
+                }
+            }
+
+            .card_subscribe_subtitle{
+                @apply w-3/12;
+                font-family: var(--font-primary-light);
+                font-size: 1.4rem;
+                text-wrap: wrap;
+            }
+
+            .card_subscribe_form{
+                @apply w-5/12 flex;
+
+                button{
+                    @apply px-[15px] py-[20px] min-h-[66px];
+                    font-size: 1.4rem;
+                    font-family: var(--font-primary-regular);
+                    font-weight: bolder;
+                }
+            }
+        }
+    }
+
+    .shopify{
+        @apply w-full px-[15px] relative;
+
+        .shopify_header{
+            @apply flex justify-between mb-[26px];
+            font-family: var(--font-primary-regular);
+
+            .shopify_header_title{
+                font-size: 4.1rem;
+            }
+
+            .shopify_header_subtitle{
+                @apply w-1/2;
+                margin: auto;
+                font-family: var(--font-primary-light);
+                font-size: 1.4rem;
+                text-align: center;
+            }
+        }
+    }
+
+    .btn-swiper{
+        @apply w-[40px] h-[40px] absolute top-[50%] flex items-center justify-center;
+        z-index: 3;
+    }
+
+    .btn-swiper-prev{
+        @apply left-[-30px];
+        background: url("/images/previous-64.png");
+        content: "";
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: contain;
+
+        &.optimize{
+            @apply left-[-15px];
+        }
+    }
+
+    .btn-swiper-next{
+        @apply right-[-30px];
+        background: url("/images/next-64.png");
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: contain;
+
+        &.optimize{
+            @apply right-[-15px];
+        }
+    }
+
+    .swiper{
+        margin: 0 !important;
+    }
+
+
+    .shopify_content{
+        @apply flex flex-wrap;
+    }
+
+    .shopify_banner_wrapper.optimize{
+        @apply w-1/2 pr-[15px] relative;
+        overflow: hidden;
+        border-radius: var(--border-radius-image);
+
+        .shopify_banner{
+            @apply w-full h-full;
+            border-radius: var(--border-radius-image);
+            transition: all ease-in-out 0.35s;
+        }
+
+        &:hover .shopify_banner{
+            transform: scale(1.1);
+        }
+    }
+
+    .banner_overlay{
+        @apply absolute w-full h-full top-0 left-0 flex items-end p-[25px];
+        background: linear-gradient(90deg, rgba(255, 255, 255, 0.43945500563506656) 0%, rgba(255, 219, 219, 0.5346931008731617) 20%, rgba(255, 206, 206, 0) 100%);
+        transition: all ease-in-out 0.35s;
+        z-index: 2;
+    }
+
+    .banner_overlay_content{
+        font-size: 2.2rem;
+        color: var(--txt-primary);
+        font-family: var(--font-primary-regular);
+        z-index: 3;
+
+        p {
+            font-size: 1.4rem !important;
+            font-family: var(--font-primary-light);
+        }
+    }
+
+    .shopify_banner_wrapper.banner-featured{
+        @apply w-full;
+        background: url("/images/hero.jpg") no-repeat;
+        background-position: center 0;
+        background-size: cover;
+        border-radius: var(--border-radius-image);
+
+        .shopify_banner{
+            @apply w-2/5 relative;
+            z-index: 3;
+        }
+
+        .banner_overlay_content{
+            @apply pl-[15px] flex flex-col justify-between;
+        }
+    }
+
+    .newsletter{
+        @apply py-[80px] pr-[40px] pl-0 w-full bg-[var(--cl-primary)] flex justify-between;
+        border-radius: 0 180px 180px 0;
+
+        .newsletter_content{
+            @apply w-1/2 pr-[15px] pl-[51px];
+
+            p{
+                font-size: 1.4rem;
+                font-family: var(--font-primary-light);
+            }
+        }
+
+        .newsletter_title{
+            @apply mb-[26px];
+            font-size: 4.1rem;
+            font-family: var(--font-primary-regular);
+        }
+
+        .newsletter_banner_wrapper{
+            @apply w-5/12 relative;
+
+            .newsletter_banner{
+                @apply absolute top-[-45px] right-[-76px] w-full h-auto;
+            }
+        }
+    }
+}

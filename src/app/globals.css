@@ -2,7 +2,13 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+@import "../styles/app/main.css";
 @import "../styles/components/NavigationBar.css";
+@import '../styles/components/Product.css';
+@import "../styles/components/Card.css";
+@import "../styles/components/Footer.css";
+@import "../styles/components/CartNotification.css";
+@import "../styles/components/CartMini.css";
 
 :root {
   --font-primary-light: NunitoSans-light;
@@ -12,15 +18,17 @@
   --bg-gray-bold: rgba(0, 0, 0, 0.07);
   --bg-primary: #f4f3ec;
   --bg-secondary: white;
+  --bg-tertiary: black;
   --cl-primary: #e3563d;
   --cl-secondary: #333;
   --bg-danger: rgb(255, 43, 43);
   --txt-primary: white;
   --txt-secondary: #333333;
   --txt-gray: #54667a;
-  --border-radius-card: 8px;
+  --border-radius-card: 18px;
   --border-radius-btn: 50px;
-  --border-radius-input: 16px;
+  --border-radius-input: 70px;
+  --border-radius-image: 18px;
 }
 
 * {
@@ -42,16 +50,97 @@ html {
   src: url('/fonts/NunitoSans-Light.ttf');
 }
 
+input[type=number]{
+  appearance: none;
+}
+
+.wrapper{
+  @apply mt-[80px] bg-[var(--bg-primary)];
+}
+
+.section.both{
+  @apply mx-[36px];
+}
+
+.section.left{
+  @apply ml-[36px];
+}
+
+.section.right{
+  @apply mr-[36px];
+}
+
+.empathize{
+  color: var(--cl-primary);
+}
+
+.filter{
+  @apply flex gap-[10px] flex-wrap items-center;
+  button{
+    text-transform: uppercase;
+  }
+}
+
+.overlay{
+  @apply block h-[100vh] w-full fixed top-0 left-0;
+  background: rgba(0, 0, 0, .7);
+  z-index: 4;
+  user-select: none;
+}
+
 /* buttons */
+.btn-primary{
+  @apply bg-[var(--cl-primary)] text-[var(--txt-primary)];
+  border-radius: var(--border-radius-btn);
+  border: 1px solid transparent;
+  transition: all ease-in-out 0.25s;
+
+  &:hover{
+    @apply bg-[var(--bg-secondary)];
+    color: var(--txt-secondary);
+    border: 1px solid var(--cl-primary);
+  }
+}
+
 .btn-secondary{
   @apply bg-transparent;
   color: var(--txt-secondary);
   border: 1px solid var(--txt-secondary);
   border-radius: var(--border-radius-btn);
+  transition: all ease-in-out 0.25s;
+
+  &.interact:hover{
+    @apply bg-[var(--cl-primary)] text-[var(--txt-primary)];
+    border: 1px solid transparent;
+  }
+}
+
+.btn-tertiary{
+  @apply bg-[var(--bg-primary)] text-[var(--txt-secondary)];
+  border-radius: var(--border-radius-btn);
+  transition: all ease-in-out 0.25s;
+
+  &:hover{
+    @apply bg-[var(--txt-secondary)] text-[var(--txt-primary)];
+  }
+}
+
+.btn-sz-small{
+  @apply py-[8px] px-[15px];
+  font-size: 1.2rem;
 }
 
 .btn-sz-medium{
   @apply py-[7px] pr-[25px] pl-[10px];
+}
+
+.btn-sz-xmedium {
+  @apply px-[30px] py-[12px];
+  font-size: 1.4rem;
+
+  svg{
+    font-size: 1.5rem;
+  }
 }
 
 .btn-st-bold{
@@ -59,6 +148,15 @@ html {
   font-family: var(--font-primary-regular);
   font-weight: bolder ;
   font-size: 1.4rem;
+  pointer-events: fill;
+}
+
+.btn-st-icon{
+  @apply flex items-center gap-[8px];
+}
+
+.btn-st-square{
+  border-radius: 8px;
 }
 
 .btn-type-select{
@@ -66,4 +164,87 @@ html {
   background: url("/images/arrow.svg") no-repeat;
   background-size: 9px;
   background-position: calc(100% - 10px) 50%;
+}
+
+.btn-type-icon{
+  @apply flex justify-center items-center w-[45px] h-[45px] bg-[var(--cl-primary)];
+  border-radius: 50%;
+  color: var(--txt-primary);
+  border: 1px solid transparent;
+  transition: all ease-in-out 0.25s;
+
+  svg{
+    font-size: 1.8rem;
+  }
+
+  &:hover{
+    border: 1px solid var(--cl-primary);
+    background-color: transparent;
+    color: var(--cl-secondary);
+  }
+}
+
+.btn-type-optimize{
+  border: none;
+  font-family: var(--font-primary-regular);
+  font-weight: bold;
+  font-size: 1.4rem;
+  color: var(--cl-primary);
+}
+
+.btn-type-icon-only{
+  svg{
+    font-size: 2.4rem;
+  }
+}
+
+.btn-type-link{
+  font-size: 1.4rem;
+  color: var(--txt-primary);
+  text-decoration: underline;
+}
+
+/* customs */
+.col-px-10{
+  @apply px-[10px]; 
+}
+
+.col-px-15{
+  @apply px-[15px];
+}
+
+/* forms */
+.form-input{
+  @apply w-full;
+  border-radius: var(--border-radius-input);
+  border: 1px solid var(--cl-primary);
+  outline: none;
+  font-family: var(--font-primary-light);
+}
+
+.input-secondary{
+  color: var(--txt-primary);
+  border: 1px solid var(--bg-primary);
+  background-color: var(--cl-primary);
+
+  &::placeholder{
+    color: var(--txt-primary);
+  }
+}
+
+.input-sz-medium{
+  @apply px-[20px] py-[15px];
+  font-size: 1.4rem;
+}
+
+.input-type-select {
+  border: 1px solid var(--cl-secondary);
+  appearance: none;
+  background: url("/images/arrow.svg") no-repeat;
+  background-size: 12px;
+  background-position: calc(100% - 10px) 50%;
+}
+
+.input-type-group{
+  @apply px-[15px] pr-[125px] pl-[20px];
 }

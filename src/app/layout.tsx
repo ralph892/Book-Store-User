@@ -1,6 +1,10 @@
 import NavigationBar from "@/components/NavigationBar";
 import "./globals.css";
 import type { Metadata } from "next";
+import Footer from "@/components/Footer";
+import CartNotification from "@/components/CartNotification";
+import Overlay from "@/components/Overlay";
+import CartMini from "@/components/CartMini";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,7 +20,11 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <NavigationBar />
+        {/* <CartNotification /> */}
+        {/* <CartMini /> */}
+        {/* <Overlay /> */}
         {children}
+        <Footer />
       </body>
     </html>
   );
