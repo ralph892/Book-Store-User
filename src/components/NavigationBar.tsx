@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import Image from "next/image";
 import {
@@ -6,10 +7,15 @@ import {
   RiShoppingCartLine,
   RiUserLine,
 } from "react-icons/ri";
+import { useDispatch } from "react-redux";
+import { mountMiniCart } from "@/redux/features/cart/cartSlice";
+import { mountOverlay } from "@/redux/features/overlay/overlaySlice";
 
 type Props = {};
 
 const NavigationBar = (props: Props) => {
+  const dispatch = useDispatch();
+
   return (
     <div className="navbar_wrapper">
       <div className="navbar_container">
@@ -52,9 +58,16 @@ const NavigationBar = (props: Props) => {
                 <div className="flex flex-col mr-[7px]">
                   <span>My Cart:</span> <span>0.00 USD</span>
                 </div>
-                <div className="navbar-menu_figure" data-content="2">
+                <button
+                  className="navbar-menu_figure"
+                  data-content={Object.keys(localStorage).length}
+                  onClick={() => {
+                    dispatch(mountMiniCart());
+                    dispatch(mountOverlay());
+                  }}
+                >
                   <RiShoppingCartLine />
-                </div>
+                </button>
               </ul>
             </li>
           </div>

@@ -1,51 +1,180 @@
+import { IBook } from "@/interfaces/customInterface";
 import Image from "next/image";
 import React from "react";
 import {
-  RiAddFill,
   RiArrowRightDoubleFill,
   RiDeleteBin6Line,
   RiShoppingBagLine,
-  RiSubtractFill,
 } from "react-icons/ri";
 
 type Props = {};
 
 const CartMini = (props: Props) => {
+  const [products, setProducts] = React.useState<IBook[]>([]);
+  const [quantities, setQuantities] = React.useState<number[]>([]);
+  const [removeItem, setRemoveItem] = React.useState("");
+  const hasExecutedEffect = React.useRef(0);
+
+  React.useEffect(() => {
+    if (hasExecutedEffect.current !== localStorage.length) {
+      const storage = Object.keys(localStorage).filter(
+        (key) => key !== "ally-supports-cache"
+      );
+      if (storage.length > 0) {
+        setProducts([]);
+        setQuantities([]);
+        for (let i = 0; i < storage.length; i++) {
+          const item = localStorage.getItem(storage[i]);
+          if (item !== null) {
+            setProducts((prev) => [...prev, JSON.parse(item)[0]]);
+            setQuantities((prev) => [...prev, JSON.parse(item)[1].count]);
+          }
+        }
+      } else setProducts([]);
+      hasExecutedEffect.current = localStorage.length;
+    }
+  }, [localStorage]);
+
+  React.useEffect(() => {
+    localStorage.removeItem(removeItem);
+    if (hasExecutedEffect.current !== localStorage.length) {
+      const storage = Object.keys(localStorage).filter(
+        (key) => key !== "ally-supports-cache"
+      );
+      if (storage.length > 0) {
+        setProducts([]);
+        setQuantities([]);
+        for (let i = 0; i < storage.length; i++) {
+          const item = localStorage.getItem(storage[i]);
+          if (item !== null) {
+            setProducts((prev) => [...prev, JSON.parse(item)[0]]);
+            setQuantities((prev) => [...prev, JSON.parse(item)[1].count]);
+          }
+        }
+      } else setProducts([]);
+      hasExecutedEffect.current = localStorage.length;
+    }
+  }, [removeItem]);
+
+  const handleRemoveProduct = (id?: string) => {
+    if (id) setRemoveItem(id);
+  };
+
+  const handleIncreaseQuantity = (id?: string, index?: number) => {
+    if (id !== undefined && index !== undefined) {
+      const item = localStorage.getItem(id);
+      if (item !== null) {
+        const parseItem = JSON.parse(item);
+        parseItem[1].count++;
+        const q = [...quantities];
+        q[index]++;
+        setQuantities(q);
+        localStorage.setItem(id, JSON.stringify(parseItem));
+      }
+    }
+  };
+
+  const handleDecreaseQuantity = (id?: string, index?: number) => {
+    if (id !== undefined && index !== undefined) {
+      const item = localStorage.getItem(id);
+      if (item !== null) {
+        const parseItem = JSON.parse(item);
+        parseItem[1].count--;
+        const q = [...quantities];
+        q[index]--;
+        setQuantities(q);
+        localStorage.setItem(id, JSON.stringify(parseItem));
+      }
+    }
+  };
+
+  const handleChangeQuantity = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    id?: string,
+    index?: number
+  ) => {
+    if (id !== undefined && index !== undefined && e.target !== undefined) {
+      e.preventDefault();
+      const item = localStorage.getItem(id);
+      const value = e.target.value;
+      if (item !== null) {
+        const parseItem = JSON.parse(item);
+        parseItem[1].count = +value;
+        const q = [...quantities];
+        q[index] = +value;
+        setQuantities(q);
+        localStorage.setItem(id, JSON.stringify(parseItem));
+      }
+    }
+  };
+
   return (
-    <div className="cart-mini_wrapper">
+    <div className="cart-mini_wrapper" id="cart-mini_wrapper">
       <div className="cart-mini">
         <div className="cart-mini_header">
           <h3>My Cart</h3>
-          <h4>2 ITEMS</h4>
+          <h4>{`${products.length} ITEMS`}</h4>
         </div>
         <div className="cart-mini_body">
-          <div className="cart-mini_item">
-            <div className="cart-mini_image_wrapper">
-              <Image
-                src="/images/giraffescan_tdance_600x600.webp"
-                alt="item image"
-                width={1000}
-                height={1000}
-              />
-            </div>
-            <div className="cart-mini_content">
-              <h3 className="mb-[8px]">Giraffes Can't Dance</h3>
-              <h3 className="mb-[5px]">
-                Author: <span>Jack</span>
-              </h3>
-              <div className="cart-mini_control-quantity">
-                <button>-</button>
-                <input type="number" min={0}></input>
-                <button>+</button>
-              </div>
-              <div className="flex justify-between mt-[12px] items-center">
-                <h2>82.00 USD</h2>
-                <button className="btn-type-icon-only">
-                  <RiDeleteBin6Line />
-                </button>
-              </div>
-            </div>
-          </div>
+          {products.length > 0 &&
+            products.map((product, index) => {
+              return (
+                <div className="cart-mini_item" key={index}>
+                  <div className="cart-mini_image_wrapper">
+                    <Image
+                      src={
+                        product.image_book ||
+                        "/images/giraffescan_tdance_600x600.webp"
+                      }
+                      alt="item image"
+                      width={1000}
+                      height={1000}
+                    />
+                  </div>
+                  <div className="cart-mini_content">
+                    <h3 className="mb-[8px]">
+                      {product.title || "Giraffes Can't Dance"}
+                    </h3>
+                    <h3 className="mb-[5px]">
+                      Author: <span>{product.author || "Jack"}</span>
+                    </h3>
+                    <div className="cart-mini_control-quantity">
+                      <button
+                        onClick={() =>
+                          handleDecreaseQuantity(product.book_id, index)
+                        }
+                      >
+                        -
+                      </button>
+                      <input
+                        type="number"
+                        min={0}
+                        value={quantities[index]}
+                        onChange={(e) =>
+                          handleChangeQuantity(e, product.book_id, index)
+                        }
+                      ></input>
+                      <button
+                        onClick={() =>
+                          handleIncreaseQuantity(product.book_id, index)
+                        }
+                      >
+                        +
+                      </button>
+                    </div>
+                    <div className="flex justify-between mt-[12px] items-center">
+                      <h2>{product.price || 82.0} USD</h2>
+                      <button
+                        className="btn-type-icon-only"
+                        onClick={() => handleRemoveProduct(product.book_id)}
+                      >
+                        <RiDeleteBin6Line />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
         </div>
         <div className="cart-mini_footer">
           <div className="flex justify-between mb-[20px]">

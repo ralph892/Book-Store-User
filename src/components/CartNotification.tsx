@@ -1,12 +1,30 @@
 import React from "react";
 import Image from "next/image";
+import { memo } from "react";
 import { RiCheckFill, RiCloseFill } from "react-icons/ri";
+import { IBook } from "@/interfaces/customInterface";
+import { useDispatch } from "react-redux";
+import { unmountNotification } from "@/redux/features/notification/notificationSlice";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
-type Props = {};
+type Props = {
+  data?: IBook;
+};
 
 const CartNotification = (props: Props) => {
+  const dispatch = useDispatch();
+
+  const [product, setProduct] = React.useState<IBook>();
+
+  React.useEffect(() => {
+    if (props.data !== undefined) {
+      setProduct(props.data);
+    }
+  }, [props.data]);
+
   return (
-    <div className="cartNotification_wrapper">
+    <div className="cartNotification_wrapper" id="cartNotification_wrapper">
       <div className="cartNotification">
         <div className="cartNotification_header">
           <span className="flex gap-[8px] flex-grow items-center">
@@ -14,7 +32,10 @@ const CartNotification = (props: Props) => {
             <RiCheckFill />
             Item added to your cart
           </span>
-          <button className="btn-type-icon-only">
+          <button
+            className="btn-type-icon-only"
+            onClick={() => dispatch(unmountNotification())}
+          >
             <RiCloseFill />
           </button>
         </div>
@@ -22,7 +43,10 @@ const CartNotification = (props: Props) => {
           <div className="cartNotification_product">
             <div className="cartNotification_image_wrapper">
               <Image
-                src="/images/giraffescan_tdance_600x600.webp"
+                src={
+                  product?.image_book ||
+                  "/images/giraffescan_tdance_600x600.webp"
+                }
                 alt="product image"
                 width={100}
                 height={100}
@@ -32,11 +56,11 @@ const CartNotification = (props: Props) => {
             </div>
             <div className="cartNotification_content">
               <h3 className="cartNotification_content_title">
-                Giraffes can't dance
+                {product?.title || "Giraffes can't dance"}
               </h3>
               <div className="cartNotification_content_subtitle">
                 <span>Author</span>
-                <span>Jack</span>
+                <span>{product?.author || "Jack"}</span>
               </div>
             </div>
           </div>
@@ -55,4 +79,4 @@ const CartNotification = (props: Props) => {
   );
 };
 
-export default CartNotification;
+export default memo(CartNotification);

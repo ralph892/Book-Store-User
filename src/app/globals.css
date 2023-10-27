@@ -82,10 +82,14 @@ input[type=number]{
 }
 
 .overlay{
-  @apply block h-[100vh] w-full fixed top-0 left-0;
+  @apply h-[100vh] w-full fixed top-0 left-0 hidden;
   background: rgba(0, 0, 0, .7);
   z-index: 4;
   user-select: none;
+
+  &.active{
+    @apply block;
+  }
 }
 
 /* buttons */

@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import Image from "next/image";
 import {
@@ -8,6 +9,8 @@ import {
   RiStarSmileFill,
 } from "react-icons/ri";
 import { IBook } from "@/interfaces/customInterface";
+import { useDispatch } from "react-redux";
+import { mountNotification } from "@/redux/features/notification/notificationSlice";
 
 type Props = {
   optimize?: boolean;
@@ -16,6 +19,25 @@ type Props = {
 };
 
 const Product = (props: Props) => {
+  const dispatch = useDispatch();
+
+  const handleAddToCart = () => {
+    if (props.data && props.data.book_id) {
+      const item = localStorage.getItem(props.data.book_id);
+      if (item === null) {
+        localStorage.setItem(
+          props.data.book_id,
+          JSON.stringify([props.data, { count: 1 }])
+        );
+      } else {
+        const parseItem = JSON.parse(item);
+        parseItem[1].count++;
+        localStorage.setItem(props.data.book_id, JSON.stringify(parseItem));
+      }
+      dispatch(mountNotification(props.data));
+    }
+  };
+
   return (
     <React.Fragment>
       {!props.optimize && !props.extend && (
@@ -57,7 +79,10 @@ const Product = (props: Props) => {
               </div>
             </div>
             <div className="product_action">
-              <button className="btn-primary btn-sz-xmedium btn-st-icon">
+              <button
+                className="btn-primary btn-sz-xmedium btn-st-icon"
+                onClick={handleAddToCart}
+              >
                 <RiShoppingBagLine />
                 Add to cart
               </button>

@@ -1,7 +1,14 @@
 @layer components{
     .cart-mini_wrapper{
-        @apply fixed top-0 right-0 w-[410px] h-full bg-[var(--bg-secondary)];
+        @apply fixed top-0 right-[-410px] w-[410px] h-full bg-[var(--bg-secondary)];
         z-index: 5;
+        opacity: 0;
+        transition: all ease-in-out 0.75s;
+
+        &.active{
+            @apply right-0;
+            opacity: 1;
+        }
     }
 
     .cart-mini{
@@ -29,7 +36,7 @@
     }
 
     .cart-mini_item{
-        @apply w-full p-[10px] flex items-center;
+        @apply w-full p-[10px] flex items-center mb-[10px];
         border: 1px solid var(--bg-gray);
     }
 
@@ -67,6 +74,7 @@
             @apply max-w-[100px] text-center;
             flex: 1;
             line-height: 1;
+            appearance: none;
         }
     }
 

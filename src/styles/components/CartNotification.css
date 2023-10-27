@@ -1,11 +1,18 @@
 @layer components{
     .cartNotification_wrapper{
-        @apply fixed top-0 right-0 max-w-[380px] w-full;
+        @apply fixed top-[-200%] right-0 max-w-[380px] w-full;
         z-index: 4;
         color: var(--txt-primary);
+        opacity: 0;
+        transition: all ease-in-out 0.75s;
 
         .cartNotification{
             @apply w-full p-[15px] bg-[var(--bg-tertiary)];
+        }
+
+        &.active{
+            @apply top-0;
+            opacity: 1;
         }
     }
 
