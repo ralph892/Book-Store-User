@@ -1,6 +1,6 @@
+import React from "react";
 import { IBook } from "@/interfaces/customInterface";
 import Image from "next/image";
-import React from "react";
 import {
   RiArrowRightDoubleFill,
   RiDeleteBin6Line,
@@ -12,49 +12,48 @@ type Props = {};
 const CartMini = (props: Props) => {
   const [products, setProducts] = React.useState<IBook[]>([]);
   const [quantities, setQuantities] = React.useState<number[]>([]);
+  const [total, setTotal] = React.useState(0);
   const [removeItem, setRemoveItem] = React.useState("");
   const hasExecutedEffect = React.useRef(0);
 
   React.useEffect(() => {
-    if (hasExecutedEffect.current !== localStorage.length) {
-      const storage = Object.keys(localStorage).filter(
-        (key) => key !== "ally-supports-cache"
-      );
-      if (storage.length > 0) {
-        setProducts([]);
-        setQuantities([]);
-        for (let i = 0; i < storage.length; i++) {
-          const item = localStorage.getItem(storage[i]);
-          if (item !== null) {
-            setProducts((prev) => [...prev, JSON.parse(item)[0]]);
-            setQuantities((prev) => [...prev, JSON.parse(item)[1].count]);
-          }
-        }
-      } else setProducts([]);
-      hasExecutedEffect.current = localStorage.length;
-    }
-  }, [localStorage]);
+    updateProducts();
+  });
 
   React.useEffect(() => {
     localStorage.removeItem(removeItem);
+    updateProducts();
+  }, [removeItem]);
+
+  const updateProducts = () => {
     if (hasExecutedEffect.current !== localStorage.length) {
       const storage = Object.keys(localStorage).filter(
         (key) => key !== "ally-supports-cache"
       );
       if (storage.length > 0) {
+        setTotal(0);
         setProducts([]);
         setQuantities([]);
         for (let i = 0; i < storage.length; i++) {
           const item = localStorage.getItem(storage[i]);
           if (item !== null) {
+            setTotal(
+              (prev) =>
+                prev + JSON.parse(item)[0].price * JSON.parse(item)[1].count
+            );
             setProducts((prev) => [...prev, JSON.parse(item)[0]]);
             setQuantities((prev) => [...prev, JSON.parse(item)[1].count]);
           }
         }
-      } else setProducts([]);
+      } else {
+        setProducts([]);
+        setQuantities([]);
+        setTotal(0);
+      }
+      localStorage.setItem("total", JSON.stringify(total));
       hasExecutedEffect.current = localStorage.length;
     }
-  }, [removeItem]);
+  };
 
   const handleRemoveProduct = (id?: string) => {
     if (id) setRemoveItem(id);
@@ -69,7 +68,9 @@ const CartMini = (props: Props) => {
         const q = [...quantities];
         q[index]++;
         setQuantities(q);
+        setTotal(total - parseItem[0].price);
         localStorage.setItem(id, JSON.stringify(parseItem));
+        localStorage.setItem("total", JSON.stringify(total));
       }
     }
   };
@@ -83,7 +84,9 @@ const CartMini = (props: Props) => {
         const q = [...quantities];
         q[index]--;
         setQuantities(q);
+        setTotal(total - parseItem[0].price);
         localStorage.setItem(id, JSON.stringify(parseItem));
+        localStorage.setItem("total", JSON.stringify(total));
       }
     }
   };
@@ -99,10 +102,15 @@ const CartMini = (props: Props) => {
       const value = e.target.value;
       if (item !== null) {
         const parseItem = JSON.parse(item);
+        const prevCount = parseItem[1].count;
         parseItem[1].count = +value;
         const q = [...quantities];
         q[index] = +value;
         setQuantities(q);
+        setTotal(
+          total - parseItem[0].price * prevCount + parseItem[0].price * +value
+        );
+        localStorage.setItem("total", JSON.stringify(total));
         localStorage.setItem(id, JSON.stringify(parseItem));
       }
     }
@@ -163,7 +171,7 @@ const CartMini = (props: Props) => {
                       </button>
                     </div>
                     <div className="flex justify-between mt-[12px] items-center">
-                      <h2>{product.price || 82.0} USD</h2>
+                      <h2>{product.price.toFixed(2) || 82.0} USD</h2>
                       <button
                         className="btn-type-icon-only"
                         onClick={() => handleRemoveProduct(product.book_id)}
@@ -179,7 +187,7 @@ const CartMini = (props: Props) => {
         <div className="cart-mini_footer">
           <div className="flex justify-between mb-[20px]">
             <h1>Subtotal:</h1>
-            <h1>82.00 USD</h1>
+            <h1>{total.toFixed(2)} USD</h1>
           </div>
           <div className="flex flex-col px-[15px] items-center gap-[20px]">
             <button className="btn-primary btn-sz-xmedium btn-st-icon">

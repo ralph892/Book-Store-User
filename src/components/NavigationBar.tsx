@@ -60,7 +60,7 @@ const NavigationBar = (props: Props) => {
                 </div>
                 <button
                   className="navbar-menu_figure"
-                  data-content={Object.keys(localStorage).length}
+                  data-content={Object.keys(localStorage).length - 2}
                   onClick={() => {
                     dispatch(mountMiniCart());
                     dispatch(mountOverlay());
