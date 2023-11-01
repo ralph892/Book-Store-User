@@ -3,11 +3,13 @@ import React from "react";
 import { RootState } from "@/redux/store";
 import CartNotification from "@/components/CartNotification";
 import Overlay from "@/components/Overlay";
+import Loading from "@/components/Loading";
 import CartMini from "@/components/CartMini";
 import NavigationBar from "@/components/NavigationBar";
 import Footer from "@/components/Footer";
 import { useSelector } from "react-redux";
 import { IBook } from "@/interfaces/customInterface";
+import { Toaster } from "sonner";
 
 type Props = {
   children: React.ReactNode;
@@ -24,6 +26,10 @@ const RootPage = (props: Props) => {
   const overlayState = useSelector(
     (state: RootState) => state.overlay.isMounted
   );
+  const loadingState = useSelector(
+    (state: RootState) => state.loading.isMounted
+  );
+  const [isLoading, setIsLoading] = React.useState(true);
   const [bookData, setBookData] = React.useState<IBook>();
 
   React.useEffect(() => {
@@ -51,6 +57,22 @@ const RootPage = (props: Props) => {
   }, [overlayState]);
 
   React.useEffect(() => {
+    const loading = document.querySelector("#loading");
+    const html = document.querySelector("html");
+    if (loading && html) {
+      if (loadingState === true) {
+        loading.classList.add("active");
+        html.style.overflow = "hidden";
+        setIsLoading(true);
+      } else {
+        loading.classList.remove("active");
+        setIsLoading(false);
+        html.style.overflow = "auto";
+      }
+    }
+  }, [loadingState]);
+
+  React.useEffect(() => {
     if (notificationData) setBookData(notificationData);
   }, [notificationData]);
 
@@ -59,9 +81,11 @@ const RootPage = (props: Props) => {
       <NavigationBar />
       <CartNotification data={bookData} />
       <CartMini />
-      {props.children}
       <Overlay />
+      {props.children}
       <Footer />
+      <Loading />
+      <Toaster richColors={true} visibleToasts={3} />
     </React.Fragment>
   );
 };

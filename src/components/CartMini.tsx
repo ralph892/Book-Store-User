@@ -28,7 +28,7 @@ const CartMini = (props: Props) => {
   const updateProducts = () => {
     if (hasExecutedEffect.current !== localStorage.length) {
       const storage = Object.keys(localStorage).filter(
-        (key) => key !== "ally-supports-cache"
+        (key) => key !== "ally-supports-cache" && key !== "total"
       );
       if (storage.length > 0) {
         setTotal(0);
@@ -68,7 +68,7 @@ const CartMini = (props: Props) => {
         const q = [...quantities];
         q[index]++;
         setQuantities(q);
-        setTotal(total - parseItem[0].price);
+        setTotal(total + parseItem[0].price);
         localStorage.setItem(id, JSON.stringify(parseItem));
         localStorage.setItem("total", JSON.stringify(total));
       }
@@ -76,7 +76,7 @@ const CartMini = (props: Props) => {
   };
 
   const handleDecreaseQuantity = (id?: string, index?: number) => {
-    if (id !== undefined && index !== undefined) {
+    if (id !== undefined && index !== undefined && quantities[index] > 1) {
       const item = localStorage.getItem(id);
       if (item !== null) {
         const parseItem = JSON.parse(item);

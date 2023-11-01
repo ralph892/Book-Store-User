@@ -8,32 +8,81 @@ import "swiper/css/navigation";
 import { RiArrowRightDoubleFill, RiSearchLine } from "react-icons/ri";
 import Product from "@/components/Product";
 import Card from "@/components/Card";
-import { handleGetBooks } from "@/api/handleApi";
+import { handleGetBooks, handleGetNewRelease } from "@/api/handleApi";
 import { IBook } from "@/interfaces/customInterface";
+import { Autoplay } from "swiper/modules";
+import { useDispatch } from "react-redux";
+import {
+  mountLoading,
+  unmountLoading,
+} from "@/redux/features/loading/loadingSlice";
 
 export default function Home() {
-  const sliderRef = React.useRef<SwiperRef>(null);
-  const [books, setBooks] = React.useState<IBook[]>();
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [exploreBooks, setExploreBooks] = React.useState<IBook[]>();
+  const [newReleaseBooks, setNewReleaseBooks] = React.useState<IBook[][]>([]);
+  const [category, setCategory] = React.useState("kids");
+  const hasCallEffect = React.useRef("");
+  const sliderRefs: React.RefObject<SwiperRef>[] = [];
+  for (let i = 0; i < 4; i++) sliderRefs.push(React.useRef<SwiperRef>(null));
 
-  const handlePrev = React.useCallback(() => {
-    if (!sliderRef.current) return;
-    sliderRef.current.swiper.slidePrev();
+  const handlePrev = React.useCallback((index: number) => {
+    const button = sliderRefs[index].current;
+    if (button !== null) button.swiper.slidePrev();
+    else return;
   }, []);
 
-  const handleNext = React.useCallback(() => {
-    if (!sliderRef.current) return;
-    sliderRef.current.swiper.slideNext();
+  const handleNext = React.useCallback((index: number) => {
+    const button = sliderRefs[index].current;
+    if (button !== null) button.swiper.slideNext();
+    else return;
   }, []);
+
+  const handleCategories = (category: string, index: number) => {
+    const filterButtons = document.querySelector("#filter-navbar")?.children;
+    if (filterButtons) {
+      for (let i = 0; i < filterButtons?.length; i++) {
+        if (i === index) {
+          filterButtons[i].classList.add("btn-primary");
+          filterButtons[i].classList.remove("btn-secondary");
+        } else {
+          filterButtons[i].classList.remove("btn-primary");
+          filterButtons[i].classList.add("btn-secondary");
+        }
+      }
+    }
+    if (category !== "" && category !== undefined) setCategory(category);
+  };
+
+  React.useLayoutEffect(() => {
+    if (isLoading === true) dispatch(mountLoading());
+    else dispatch(unmountLoading());
+  }, [isLoading]);
 
   React.useEffect(() => {
-    const fetchApi = async () => {
-      const result = await handleGetBooks("category", "kids");
-      if (result?.response) {
-        setBooks(result.response);
-      }
-    };
-    fetchApi();
-  }, []);
+    if (hasCallEffect.current !== category) {
+      const fetchApi = async () => {
+        const result1 = await handleGetBooks("category", category, 5);
+        const result2 = await handleGetNewRelease(20);
+        if (result1?.response) {
+          setExploreBooks(result1.response);
+        }
+        if (result2?.response) {
+          for (let i = 0; i < result2.response.length; i = i + 4) {
+            const arr: IBook[] = [];
+            for (let j = i; j < i + 4; j++) {
+              if (result2.response[j]) arr.push(result2.response[j]);
+            }
+            if (arr.length === 4) setNewReleaseBooks((prev) => [...prev, arr]);
+          }
+        }
+        if (result1?.response && result2?.response) setIsLoading(false);
+      };
+      fetchApi();
+      hasCallEffect.current = category;
+    }
+  }, [category]);
 
   return (
     <DefaultLayout>
@@ -107,20 +156,27 @@ export default function Home() {
             <h3 className="shopify_header_title">
               Explore <span className="empathize">Books</span>
             </h3>
-            <div className="filter">
-              <button className="filter_button btn-sz-small btn-primary interact">
+            <div className="filter" id="filter-navbar">
+              <button
+                className="filter_button btn-sz-small btn-primary interact"
+                onClick={() => handleCategories("kids", 0)}
+              >
                 Kids books
               </button>
-              <button className="filter_button btn-sz-small btn-secondary interact">
-                Biography
+              <button
+                className="filter_button btn-sz-small btn-secondary interact"
+                onClick={() => handleCategories("health", 1)}
+              >
+                Health
               </button>
             </div>
           </div>
           <div className="shopify_content">
             <Swiper
-              ref={sliderRef}
+              ref={sliderRefs[0]}
               slidesPerView={1}
               spaceBetween={5}
+              loop={true}
               breakpoints={{
                 768: {
                   slidesPerView: 4,
@@ -131,10 +187,12 @@ export default function Home() {
               }}
               autoplay={{
                 delay: 5000,
+                disableOnInteraction: false,
               }}
+              modules={[Autoplay]}
             >
-              {books &&
-                books.map((book, index) => {
+              {exploreBooks &&
+                exploreBooks.map((book, index) => {
                   return (
                     <SwiperSlide key={index}>
                       <Product data={book}></Product>
@@ -144,11 +202,11 @@ export default function Home() {
             </Swiper>
             <button
               className="btn-swiper btn-swiper-prev"
-              onClick={handlePrev}
+              onClick={() => handlePrev(0)}
             ></button>
             <button
               className="btn-swiper btn-swiper-next"
-              onClick={handleNext}
+              onClick={() => handleNext(0)}
             ></button>
           </div>
         </div>
@@ -189,27 +247,49 @@ export default function Home() {
               </div>
             </div>
             <div className="w-1/2 px-[15px] relative">
-              <Swiper>
-                <SwiperSlide>
-                  <div className="w-full flex">
-                    <div className="w-1/2 flex flex-col">
-                      <Product optimize />
-                      <Product optimize />
-                    </div>
-                    <div className="w-1/2 flex flex-col">
-                      <Product optimize />
-                      <Product optimize />
-                    </div>
-                  </div>
-                </SwiperSlide>
+              <Swiper
+                ref={sliderRefs[1]}
+                slidesPerView={1}
+                loop={true}
+                breakpoints={{
+                  768: {
+                    slidesPerView: 1,
+                  },
+                  1024: {
+                    slidesPerView: 1,
+                  },
+                }}
+                autoplay={{
+                  delay: 5000,
+                  disableOnInteraction: false,
+                }}
+                modules={[Autoplay]}
+              >
+                {newReleaseBooks &&
+                  newReleaseBooks.map((books, index) => {
+                    return (
+                      <SwiperSlide key={index}>
+                        <div className="w-full flex">
+                          <div className="w-1/2 flex flex-col">
+                            {books[0] && <Product optimize data={books[0]} />}
+                            {books[1] && <Product optimize data={books[1]} />}
+                          </div>
+                          <div className="w-1/2 flex flex-col">
+                            {books[2] && <Product optimize data={books[2]} />}
+                            {books[3] && <Product optimize data={books[3]} />}
+                          </div>
+                        </div>
+                      </SwiperSlide>
+                    );
+                  })}
               </Swiper>
               <button
                 className="btn-swiper btn-swiper-prev optimize"
-                onClick={handlePrev}
+                onClick={() => handlePrev(1)}
               ></button>
               <button
                 className="btn-swiper btn-swiper-next optimize"
-                onClick={handleNext}
+                onClick={() => handleNext(1)}
               ></button>
             </div>
           </div>
@@ -258,7 +338,25 @@ export default function Home() {
             </h3>
           </div>
           <div className="shopify_content">
-            <Swiper ref={sliderRef} slidesPerView={2} spaceBetween={10}>
+            <Swiper
+              ref={sliderRefs[2]}
+              slidesPerView={1}
+              loop={true}
+              spaceBetween={10}
+              breakpoints={{
+                768: {
+                  slidesPerView: 2,
+                },
+                1024: {
+                  slidesPerView: 2,
+                },
+              }}
+              autoplay={{
+                delay: 5000,
+                disableOnInteraction: false,
+              }}
+              modules={[Autoplay]}
+            >
               <SwiperSlide>
                 <Product extend />
               </SwiperSlide>
@@ -274,11 +372,11 @@ export default function Home() {
             </Swiper>
             <button
               className="btn-swiper btn-swiper-prev"
-              onClick={handlePrev}
+              onClick={() => handlePrev(2)}
             ></button>
             <button
               className="btn-swiper btn-swiper-next"
-              onClick={handleNext}
+              onClick={() => handleNext(2)}
             ></button>
           </div>
         </div>
@@ -319,7 +417,25 @@ export default function Home() {
             </h3>
           </div>
           <div className="shopify_content">
-            <Swiper ref={sliderRef} slidesPerView={4} spaceBetween={5}>
+            <Swiper
+              ref={sliderRefs[3]}
+              slidesPerView={1}
+              loop={true}
+              spaceBetween={5}
+              breakpoints={{
+                768: {
+                  slidesPerView: 4,
+                },
+                1024: {
+                  slidesPerView: 4,
+                },
+              }}
+              autoplay={{
+                delay: 5000,
+                disableOnInteraction: false,
+              }}
+              modules={[Autoplay]}
+            >
               <SwiperSlide>
                 <Card />
               </SwiperSlide>
@@ -335,11 +451,11 @@ export default function Home() {
             </Swiper>
             <button
               className="btn-swiper btn-swiper-prev"
-              onClick={handlePrev}
+              onClick={() => handlePrev(3)}
             ></button>
             <button
               className="btn-swiper btn-swiper-next"
-              onClick={handleNext}
+              onClick={() => handleNext(3)}
             ></button>
           </div>
         </div>

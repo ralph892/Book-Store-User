@@ -1,13 +1,11 @@
 export interface IUser {
-  id?: string;
-  username: string;
+  user_id?: string;
   password: string;
   firstName: string;
   lastName: string;
   address: string;
   phoneNumber: number;
   email: string;
-  avatar?: string;
 }
 
 export interface IBook {

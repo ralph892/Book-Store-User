@@ -1,0 +1,120 @@
+@layer components{
+    /* forms */
+    .card-form_wrapper{
+        @apply w-7/12 my-[80px] bg-[var(--bg-secondary)];
+        font-family: var(--font-primary-light);
+    }
+
+    .card-form_header{
+        @apply flex flex-col items-center justify-center mb-[26px];
+
+        button{
+            @apply flex items-center gap-[10px];
+            font-size: 1.3rem;
+
+            svg{
+                font-size: 3.4rem;
+                padding: 5px;
+                border: 1px solid var(--txt-secondary);
+                border-radius: 50%;
+            }
+        }
+
+        h3{
+            font-size: 3.4rem;
+            font-family: var(--font-primary-regular);
+            font-weight: bolder;
+        }
+    }
+
+    .card-form_body{
+        @apply w-full;
+        border: 1px solid var(--bg-gray);
+
+        .form_header{
+            @apply w-full text-center p-[20px];
+            font-size: 1.8rem;
+            font-weight: bolder;
+        }
+    }
+
+    .form-content{
+        @apply p-[20px] w-full;
+    }
+
+    .has-border{
+        border-top: 1px solid var(--bg-gray);
+        border-bottom: 1px solid var(--bg-gray);
+    }
+
+    .form_section{
+        @apply p-[20px] w-full flex gap-[15px] items-center;
+
+        .btn-type-link{
+            color: var(--txt-secondary);
+        }
+
+        span{
+            font-size: 1.4rem;
+        }
+    }
+
+    .form-label{
+        @apply mb-[10px];
+        font-size: 1.4rem;
+        font-family: var(--font-primary-regular);
+
+        sup{
+            font-size: 0.75rem;
+            color:red;
+            line-height: 0;
+            vertical-align: baseline;
+        }
+    }
+
+    .form-error{
+        @apply block h-[20px];
+        font-size: 1.2rem;
+        color: red;
+    }
+
+    .form-input{
+        @apply w-full;
+        border-radius: var(--border-radius-input);
+        border: 1px solid var(--cl-primary);
+        outline: none;
+        font-family: var(--font-primary-light);
+    }
+
+    .input-secondary{
+        color: var(--txt-primary);
+        border: 1px solid var(--bg-primary);
+        background-color: var(--cl-primary);
+
+        &::placeholder{
+            color: var(--txt-primary);
+        }
+    }
+
+    .input-sz-xsmall{
+        @apply py-[12px] px-[15px];
+        font-size: 1.4rem;
+    }
+
+    .input-sz-medium{
+        @apply px-[20px] py-[15px];
+        font-size: 1.4rem;
+    }
+
+    .input-type-select {
+        border: 1px solid var(--cl-secondary);
+        appearance: none;
+        background: url("/images/arrow.svg") no-repeat;
+        background-size: 12px;
+        background-position: calc(100% - 10px) 50%;
+    }
+
+    .input-type-group{
+        @apply px-[15px] pr-[125px] pl-[20px];
+    }
+}

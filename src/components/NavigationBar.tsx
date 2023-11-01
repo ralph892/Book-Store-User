@@ -15,6 +15,16 @@ type Props = {};
 
 const NavigationBar = (props: Props) => {
   const dispatch = useDispatch();
+  const [quantities, setQuantities] = React.useState(0);
+
+  React.useEffect(() => {
+    if (typeof window !== "undefined")
+      setQuantities(
+        Object.keys(localStorage).filter(
+          (key) => key !== "total" && key !== "ally-supports-cache"
+        ).length
+      );
+  });
 
   return (
     <div className="navbar_wrapper">
@@ -60,7 +70,7 @@ const NavigationBar = (props: Props) => {
                 </div>
                 <button
                   className="navbar-menu_figure"
-                  data-content={Object.keys(localStorage).length - 2}
+                  data-content={quantities}
                   onClick={() => {
                     dispatch(mountMiniCart());
                     dispatch(mountOverlay());

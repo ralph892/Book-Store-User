@@ -32,7 +32,7 @@
         font-family: var(--font-primary-regular);
 
         .product_image_wrapper{
-            @apply w-1/2 relative;
+            @apply w-5/12 h-[140px] relative;
 
             .product_image{
                 @apply w-full h-full;
@@ -93,7 +93,7 @@
     }
 
     .product_content-optimize{
-        @apply pl-[15px] flex flex-col justify-between;
+        @apply pl-[15px] w-7/12 flex flex-col justify-between;
         overflow: hidden;
 
         .product_content_title {
@@ -115,6 +115,9 @@
             font-size: 1.2rem;
             font-family: var(--font-primary-light);
             color: var(--cl-primary);
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
         }
     }
 

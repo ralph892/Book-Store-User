@@ -95,7 +95,10 @@ const Product = (props: Props) => {
           <div className="product-optimize">
             <div className="product_image_wrapper">
               <Image
-                src={"/images/giraffescan_tdance_600x600.webp"}
+                src={
+                  props.data?.image_book ||
+                  "/images/giraffescan_tdance_600x600.webp"
+                }
                 alt="product image"
                 width={1000}
                 height={1000}
@@ -104,11 +107,15 @@ const Product = (props: Props) => {
             </div>
             <div className="product_content-optimize">
               <div>
-                <div className="product_content_subtitle">Jack</div>
+                <div className="product_content_subtitle">
+                  {props.data?.author || "Jack"}
+                </div>
                 <h3 className="product_content_title">
-                  Let's know about Animals
+                  {props.data?.title || "Let's know about Animals"}
                 </h3>
-                <div className="product_content_price">65.00 USD</div>
+                <div className="product_content_price">
+                  {props.data?.price || 0}.00 USD
+                </div>
               </div>
               <button className="btn-type-optimize btn-st-icon">
                 <RiShoppingBagLine />

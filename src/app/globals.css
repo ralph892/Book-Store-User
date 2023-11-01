@@ -9,6 +9,7 @@
 @import "../styles/components/Footer.css";
 @import "../styles/components/CartNotification.css";
 @import "../styles/components/CartMini.css";
+@import "../styles//app/account.css";
 
 :root {
   --font-primary-light: NunitoSans-light;
@@ -37,6 +38,7 @@
 
 html {
   @apply lg:text-[62.5%] md:text-[62.5%] text-[50%];
+  /* overflow: hidden; */
 }
 
 /* fonts */
@@ -56,6 +58,10 @@ input[type=number]{
 
 .wrapper{
   @apply mt-[80px] bg-[var(--bg-primary)];
+}
+
+.section.center{
+  @apply flex justify-center;
 }
 
 .section.both{
@@ -89,6 +95,27 @@ input[type=number]{
 
   &.active{
     @apply block;
+  }
+}
+
+.loading_wrapper{
+  @apply fixed top-0 left-0 w-full h-[100vh] hidden;
+  background-color: var(--bg-secondary);
+  z-index: 5;
+  user-select: none;
+  overflow: hidden;
+
+  &.active{
+    @apply flex items-center justify-center;
+  }
+
+  .loading{
+    @apply w-[100px] h-[100px];
+    img{
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+    
   }
 }
 
@@ -134,6 +161,11 @@ input[type=number]{
   font-size: 1.2rem;
 }
 
+.btn-sz-xsmall{
+  @apply py-[12px] px-[10px];
+  font-size: 1.4rem;
+}
+
 .btn-sz-medium{
   @apply py-[7px] pr-[25px] pl-[10px];
 }
@@ -156,7 +188,7 @@ input[type=number]{
 }
 
 .btn-st-icon{
-  @apply flex items-center gap-[8px];
+  @apply flex items-center justify-center gap-[8px];
 }
 
 .btn-st-square{
@@ -197,8 +229,14 @@ input[type=number]{
 }
 
 .btn-type-icon-only{
+  transition: all ease-in-out 0.25s;
+
   svg{
     font-size: 2.4rem;
+  }
+
+  &:hover{
+    color: var(--cl-primary);
   }
 }
 
@@ -215,40 +253,4 @@ input[type=number]{
 
 .col-px-15{
   @apply px-[15px];
-}
-
-/* forms */
-.form-input{
-  @apply w-full;
-  border-radius: var(--border-radius-input);
-  border: 1px solid var(--cl-primary);
-  outline: none;
-  font-family: var(--font-primary-light);
-}
-
-.input-secondary{
-  color: var(--txt-primary);
-  border: 1px solid var(--bg-primary);
-  background-color: var(--cl-primary);
-
-  &::placeholder{
-    color: var(--txt-primary);
-  }
-}
-
-.input-sz-medium{
-  @apply px-[20px] py-[15px];
-  font-size: 1.4rem;
-}
-
-.input-type-select {
-  border: 1px solid var(--cl-secondary);
-  appearance: none;
-  background: url("/images/arrow.svg") no-repeat;
-  background-size: 12px;
-  background-position: calc(100% - 10px) 50%;
-}
-
-.input-type-group{
-  @apply px-[15px] pr-[125px] pl-[20px];
 }
