@@ -10,6 +10,7 @@
 @import "../styles/components/CartNotification.css";
 @import "../styles/components/CartMini.css";
 @import "../styles//app/account.css";
+@import "../styles/app/cart.css";
 
 :root {
   --font-primary-light: NunitoSans-light;
@@ -50,10 +51,6 @@ html {
 @font-face {
   font-family: NunitoSans-light;
   src: url('/fonts/NunitoSans-Light.ttf');
-}
-
-input[type=number]{
-  appearance: none;
 }
 
 .wrapper{
@@ -244,6 +241,18 @@ input[type=number]{
   font-size: 1.4rem;
   color: var(--txt-primary);
   text-decoration: underline;
+}
+
+.btn-type-link-icon{
+  @apply flex items-center gap-[10px];
+    font-size: 1.3rem;
+  
+    svg {
+      font-size: 3.4rem;
+      padding: 5px;
+      border: 1px solid var(--txt-secondary);
+      border-radius: 50%;
+    }
 }
 
 /* customs */

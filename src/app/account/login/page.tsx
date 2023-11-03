@@ -5,11 +5,45 @@ import { useDispatch } from "react-redux";
 import { unmountLoading } from "@/redux/features/loading/loadingSlice";
 import { RiArrowLeftLine, RiArrowRightLine } from "react-icons/ri";
 import Link from "next/link";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { handleLogin } from "@/api/handleAuth";
+import { toast } from "sonner";
 
 type Props = {};
 
 const page = (props: Props) => {
   const dispatch = useDispatch();
+
+  const validateSchema = Yup.object().shape({
+    email: Yup.string().email("Invalid email").required("Required"),
+    password: Yup.string()
+      .min(3, "The password too short")
+      .max(50, "The password too long")
+      .required("Required"),
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: validateSchema,
+    validateOnChange: false,
+    onSubmit: async (values) => {
+      const result = await handleLogin(values.email, values.password);
+      if (result.errors) {
+        toast.error(result.errors.message, {
+          action: {
+            label: "Cancel",
+            onClick: () => {},
+          },
+          position: "top-right",
+          duration: 2000,
+        });
+      }
+    },
+  });
 
   React.useEffect(() => {
     dispatch(unmountLoading());
@@ -21,14 +55,14 @@ const page = (props: Props) => {
         <div className="card-form_wrapper">
           <div className="card-form_header">
             <Link href="/">
-              <button className="mb-[15px]">
+              <button className="btn-type-link-icon mb-[15px]">
                 <RiArrowLeftLine />
                 Back to Shop
               </button>
             </Link>
             <h3>Log in</h3>
           </div>
-          <form className="card-form_body">
+          <form className="card-form_body" onSubmit={formik.handleSubmit}>
             <div className="form_header">If you are the returning customer</div>
             <div className="form-content has-border">
               <div className="w-full flex flex-wrap">
@@ -39,8 +73,12 @@ const page = (props: Props) => {
                   <input
                     className="form-input input-sz-xsmall"
                     placeholder="Email"
+                    id="email"
+                    name="email"
+                    onChange={formik.handleChange}
                     autoFocus
                   ></input>
+                  <span className="form-error">{formik.errors.email}</span>
                 </div>
                 <div className="w-1/2 px-[10px]">
                   <div className="form-label">
@@ -50,7 +88,11 @@ const page = (props: Props) => {
                     className="form-input input-sz-xsmall"
                     placeholder="Password"
                     type="password"
+                    id="password"
+                    name="password"
+                    onChange={formik.handleChange}
                   ></input>
+                  <span className="form-error">{formik.errors.password}</span>
                 </div>
               </div>
             </div>

@@ -10,12 +10,14 @@ import {
 import { useDispatch } from "react-redux";
 import { mountMiniCart } from "@/redux/features/cart/cartSlice";
 import { mountOverlay } from "@/redux/features/overlay/overlaySlice";
+import Link from "next/link";
 
 type Props = {};
 
 const NavigationBar = (props: Props) => {
   const dispatch = useDispatch();
   const [quantities, setQuantities] = React.useState(0);
+  const dropboxRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
     if (typeof window !== "undefined")
@@ -51,10 +53,21 @@ const NavigationBar = (props: Props) => {
           <div className="navbar-menus_wrapper">
             <li className="navbar-menus">
               <ul className="navbar-menu">
-                <RiUserLine />
-              </ul>
-              <ul className="navbar-menu">
                 <RiSearchLine />
+              </ul>
+              <ul className="navbar-menu has-dropbox">
+                <RiUserLine />
+                <div className="dropbox_wrapper" ref={dropboxRef}>
+                  <li className="dropbox">
+                    <ul>
+                      <Link href="/account/login">Login</Link>
+                    </ul>
+                    <ul>
+                      <Link href="/account/register">Register</Link>
+                    </ul>
+                    <ul>My cart</ul>
+                  </li>
+                </div>
               </ul>
               <ul className="navbar-menu">
                 <RiEarthLine />

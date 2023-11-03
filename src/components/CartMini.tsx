@@ -6,6 +6,7 @@ import {
   RiDeleteBin6Line,
   RiShoppingBagLine,
 } from "react-icons/ri";
+import Link from "next/link";
 
 type Props = {};
 
@@ -156,7 +157,7 @@ const CartMini = (props: Props) => {
                       </button>
                       <input
                         type="number"
-                        min={0}
+                        min={1}
                         value={quantities[index]}
                         onChange={(e) =>
                           handleChangeQuantity(e, product.book_id, index)
@@ -194,9 +195,9 @@ const CartMini = (props: Props) => {
               Proceed To Checkout
               <RiShoppingBagLine />
             </button>
-            <a href="#" className="flex gap-[10px] items-center">
+            <Link href="/cart" className="flex gap-[10px] items-center">
               View Cart <RiArrowRightDoubleFill />
-            </a>
+            </Link>
           </div>
         </div>
       </div>

@@ -93,7 +93,7 @@ const page = (props: Props) => {
         <div className="card-form_wrapper">
           <div className="card-form_header">
             <Link href="/">
-              <button className="mb-[15px]">
+              <button className="btn-type-link-icon mb-[15px]">
                 <RiArrowLeftLine />
                 Back to Shop
               </button>

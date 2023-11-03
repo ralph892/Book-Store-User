@@ -8,18 +8,6 @@
     .card-form_header{
         @apply flex flex-col items-center justify-center mb-[26px];
 
-        button{
-            @apply flex items-center gap-[10px];
-            font-size: 1.3rem;
-
-            svg{
-                font-size: 3.4rem;
-                padding: 5px;
-                border: 1px solid var(--txt-secondary);
-                border-radius: 50%;
-            }
-        }
-
         h3{
             font-size: 3.4rem;
             font-family: var(--font-primary-regular);
