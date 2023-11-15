@@ -47,7 +47,9 @@ const NavigationBar = (props: Props) => {
               <ul className="navbar-category">Products</ul>
               <ul className="navbar-category">Sale off</ul>
               <ul className="navbar-category">Contact</ul>
-              <ul className="navbar-category">Latest Categories</ul>
+              <ul className="navbar-category">
+                <Link href="/categories">Latest Categories</Link>
+              </ul>
             </li>
           </div>
           <div className="navbar-menus_wrapper">

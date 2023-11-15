@@ -15,6 +15,16 @@ export const handleCreateUser = async (data: IUser) => {
   }
 };
 
+// categories
+export const handleGetCategories = async () => {
+  try {
+    const result = await instance.get("/categories");
+    return { response: result.data };
+  } catch (error: any) {
+    return { errors: error.response.data };
+  }
+};
+
 // books
 export const handleGetBooks = async (
   key?: "category",
@@ -28,9 +38,21 @@ export const handleGetBooks = async (
     } else if (limit && key) {
       const result = await instance.get(`/books?${key}=${data}&limit=${limit}`);
       return { response: result.data };
+    } else {
+      const result = await instance.get("/books");
+      return { response: result.data };
     }
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const handleGetBook = async (id?: string) => {
+  try {
+    const result = await instance.get(`books/${id}`);
+    return { response: result.data };
+  } catch (error: any) {
+    return { errors: error.response.data };
   }
 };
 

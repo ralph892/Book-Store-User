@@ -1,0 +1,23 @@
+@layer components{
+    .detail_content{
+        @apply w-full;
+        font-family: var(--font-primary-light);
+
+        .detail_content_title{
+            @apply mt-[15px] mb-[10px];
+            font-size: 2.6rem;
+            font-family: var(--font-primary-regular);
+            font-weight: bold;
+        }
+
+        .detail_content_subtitle{
+            font-size: 1.4rem;
+            font-weight: bold;
+        }
+
+        p{
+            @apply mt-[10px];
+            font-size: 1.4rem;
+        }
+    }
+}

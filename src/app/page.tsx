@@ -156,7 +156,7 @@ export default function Home() {
             <h3 className="shopify_header_title">
               Explore <span className="empathize">Books</span>
             </h3>
-            <div className="filter" id="filter-navbar">
+            <div className="filter-navbar" id="filter-navbar">
               <button
                 className="filter_button btn-sz-small btn-primary interact"
                 onClick={() => handleCategories("kids", 0)}

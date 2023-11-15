@@ -66,6 +66,10 @@
         color: red;
     }
 
+    .form-checkbox{
+        @apply w-[20px] h-[20px];
+    }
+
     .form-input{
         @apply w-full;
         border-radius: var(--border-radius-input);
@@ -81,6 +85,61 @@
 
         &::placeholder{
             color: var(--txt-primary);
+        }
+    }
+
+    .input-tertiary{
+        border: 1px solid var(--bg-gray);
+        border-radius: 8px;
+        transition: all ease-in-out 0.05s;
+
+        &:focus{
+            border-color: var(--cl-primary);
+            outline: 1.5px solid var(--cl-primary);
+        }
+
+    }
+
+    .input-custom-container{
+        @apply relative;
+
+        .input-custom{
+            @apply block w-full;
+            border: 1px solid var(--bg-gray);
+            outline: none;
+            background-color: transparent;
+            border-radius: 8px;
+        }
+
+        .input-custom-label{
+            position: absolute;
+            top: 0;
+            left: 15px;
+            font-size: 1.4rem;
+            color: rgba(204, 204, 204, 0);
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .input-custom-highlight{
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 2px;
+            width: 0;
+            background-color: var(--cl-primary);
+            transition: all 0.3s ease;
+        }
+
+        .input-custom:focus+.input-custom-label {
+            top: -10px;
+            font-size: 1.2rem;
+            color: var(--cl-primary);
+            background-color: var(--bg-secondary);
+        }
+
+        .input-custom:focus+.input-custom-label+.input-custom-highlight {
+            width: 100%;
         }
     }
 

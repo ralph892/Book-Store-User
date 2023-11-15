@@ -191,10 +191,13 @@ const CartMini = (props: Props) => {
             <h1>{total.toFixed(2)} USD</h1>
           </div>
           <div className="flex flex-col px-[15px] items-center gap-[20px]">
-            <button className="btn-primary btn-sz-xmedium btn-st-icon">
+            <Link
+              href="/checkouts"
+              className="btn-primary btn-sz-xmedium btn-st-icon"
+            >
               Proceed To Checkout
               <RiShoppingBagLine />
-            </button>
+            </Link>
             <Link href="/cart" className="flex gap-[10px] items-center">
               View Cart <RiArrowRightDoubleFill />
             </Link>

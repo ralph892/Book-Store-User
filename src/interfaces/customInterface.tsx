@@ -18,5 +18,5 @@ export interface IBook {
   quantity: number;
   image_book?: string;
   description?: string;
-  category: string;
+  category_name: string;
 }

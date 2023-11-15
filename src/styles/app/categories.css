@@ -1,0 +1,92 @@
+@layer components{
+    .categories_header{
+        @apply flex w-full px-[15px] items-center;
+        font-family: var(--font-primary-regular);
+
+        h3{
+            font-size: 2.2rem;
+            font-weight: bolder;
+        }
+
+        p{
+            font-size: 1.4rem;
+        }
+    }
+
+    .categories_body{
+        @apply w-full flex;
+
+        .swiper-pagination{
+            @apply flex items-center justify-center bottom-[5px] !important;
+        }
+
+        .swiper-pagination-bullet {
+            @apply w-[40px] h-[40px] text-center flex justify-center items-center bg-[var(--bg-secondary)];
+            border: 1px solid var(--cl-primary) !important;
+            font-size: 1.4rem;
+            user-select: none;
+        }
+    }
+
+    .categories_products{
+        @apply w-full flex flex-wrap gap-[10px];
+    }
+
+    .filter{
+        @apply w-full pl-[15px];
+    }
+
+    .filter_section{
+        @apply w-full flex flex-col py-[10px];
+        border-bottom: 1px solid var(--bg-gray);
+
+        .filter_section_header{
+            @apply w-full flex flex-col py-[22px] gap-[12px];
+            
+
+            .filter_section_title{
+                @apply flex items-center justify-between;
+                font-family: var(--font-primary-regular);
+                font-size: 1.5rem;
+            }
+
+            .filter_section_subtitle{
+                @apply flex items-center justify-between;
+                font-family: var(--font-primary-light);
+                font-size: 1.4rem;
+            }
+        }
+
+        .filter_section_body{
+            @apply w-full flex flex-col;
+            font-size: 1.3rem;
+            font-family: var(--font-primary-light);
+
+            .filter_checkbox_wrapper{
+                @apply flex; 
+            }
+
+            .filter_checkbox{
+                @apply flex flex-grow gap-[10px] my-[8px];
+
+                input[type="checkbox"]{
+                    @apply w-[20px] h-[20px];
+                    border-radius: var(--border-radius-card);
+                }
+            }
+
+            .filter_count{
+                @apply flex items-center;
+            }
+
+            input[type="number"]{
+                @apply p-[10px] w-full mt-[5px];
+                appearance: none;
+                border-radius: var(--border-radius-input);
+                font-weight: bold;
+                border: 1px solid var(--bg-gray);
+            }
+        }
+    }
+    
+}

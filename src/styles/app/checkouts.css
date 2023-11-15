@@ -1,0 +1,84 @@
+@layer components{
+    .checkouts_wrapper{
+        @apply w-full py-[60px] flex;
+    }
+
+    .checkouts_form{
+        @apply w-full flex flex-col;
+    }
+
+    .form-payment{
+        @apply w-full bg-[var(--bg-gray-light)];
+        font-size: 1.4rem;
+        border-radius: var(--border-radius-card);
+
+        .payment_header{
+            @apply w-full p-[17px] flex bg-[#f0f5ff] justify-between ;
+            border: 1px solid #1773b0;
+            border-radius: var(--border-radius-card) var(--border-radius-card) 0 0;
+
+            svg{
+                color: var(--cl-primary);
+                font-size: 3.8rem;
+                width: 38px;
+                height: 24px;
+            }
+        }
+
+        .payment_body{
+            @apply w-full p-[17px];
+
+            .payment_body_section{
+                @apply flex relative gap-[8px];
+
+                svg{
+                    @apply absolute top-[40%] right-[8px];
+                    transform: translateY(-50%);
+                    font-size: 2.4rem;
+                    font-weight: lighter;
+                }
+            }
+        }
+    }
+
+    .checkouts_products{
+        h2 {
+            font-size: 1.6rem;
+            font-weight: bolder;
+        }
+
+        h3 {
+            font-size: 1.4rem;
+        }
+
+        span {
+            color: var(--txt-gray);
+            font-size: 1.2rem;
+        }
+
+        .checkouts_product_price {
+            font-size: 1.4rem;
+        }
+    }
+
+    .checkouts_product{
+        @apply p-[15px] flex h-[64px] justify-between items-center relative;
+        font-family: var(--font-primary-regular);
+
+        .checkouts_product_image{
+            @apply w-[64px] h-[64px];
+            object-fit: contain;
+        }
+
+        &::before{
+            @apply absolute block w-[15px] h-[15px] top-[-5px] left-[64px] text-center;
+            content: attr(data-content);
+            border-radius: 50%;
+            background-color: var(--cl-primary);
+            z-index: 2;
+            color: var(--txt-primary);
+        }
+    }
+
+    
+}

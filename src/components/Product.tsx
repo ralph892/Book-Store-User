@@ -11,6 +11,7 @@ import {
 import { IBook } from "@/interfaces/customInterface";
 import { useDispatch } from "react-redux";
 import { mountNotification } from "@/redux/features/notification/notificationSlice";
+import Link from "next/link";
 
 type Props = {
   optimize?: boolean;
@@ -44,13 +45,15 @@ const Product = (props: Props) => {
         <div className="product_wrapper">
           <div className="product">
             <div className="product_image_wrapper">
-              <Image
-                src={props.data?.image_book || "/images/hero.jpg"}
-                alt="product image"
-                width={1000}
-                height={1000}
-                className="product_image"
-              />
+              <Link href={`/detail/${props.data?.book_id}`}>
+                <Image
+                  src={props.data?.image_book || "/images/hero.jpg"}
+                  alt="product image"
+                  width={1000}
+                  height={1000}
+                  className="product_image"
+                />
+              </Link>
               <div className="product_menu">
                 <a href="#">
                   <RiHeartLine />

@@ -227,7 +227,7 @@ const page = (props: Props) => {
               <h3>{`${total.toFixed(2)} USD`}</h3>
               <p>Taxes and shipping calculated at checkout</p>
               <button className="btn-primary btn-sz-xmedium">
-                Proceed To Checkout
+                <Link href="/checkouts">Proceed To Checkout</Link>
               </button>
             </div>
           </div>

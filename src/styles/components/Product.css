@@ -5,7 +5,7 @@
     }
 
     .product_wrapper-optimize{
-        @apply w-full h-1/2 my-[10px];
+        @apply w-full h-1/2;
     }
 
     .product_wrapper-extend{
@@ -86,9 +86,15 @@
         }
 
         .product_content_subtitle{
-            @apply flex justify-between;
+            @apply flex justify-between gap-[36px];
             font-size: 1.6rem;
             font-family: var(--font-primary-light);
+
+            span{
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
         }
     }
 

@@ -11,11 +11,17 @@
 @import "../styles/components/CartMini.css";
 @import "../styles//app/account.css";
 @import "../styles/app/cart.css";
+@import "../styles/app/detail.css";
+@import "../styles/components/Comment.css";
+@import "../styles/components/features/Rating.css";
+@import "../styles/app/checkouts.css";
+@import "../styles/app/categories.css";
 
 :root {
   --font-primary-light: NunitoSans-light;
   --font-primary-regular: NunitoSans-regular;
   --bg-cyan-light: #ecf0f4;
+  --bg-gray-light: #f4f4f4;
   --bg-gray: rgb(179, 179, 179);
   --bg-gray-bold: rgba(0, 0, 0, 0.07);
   --bg-primary: #f4f3ec;
@@ -77,7 +83,7 @@ html {
   color: var(--cl-primary);
 }
 
-.filter{
+.filter-navbar{
   @apply flex gap-[10px] flex-wrap items-center;
   button{
     text-transform: uppercase;
@@ -124,7 +130,7 @@ html {
   transition: all ease-in-out 0.25s;
 
   &:hover{
-    @apply bg-[var(--bg-secondary)];
+    @apply bg-transparent;
     color: var(--txt-secondary);
     border: 1px solid var(--cl-primary);
   }
@@ -175,6 +181,8 @@ html {
     font-size: 1.5rem;
   }
 }
+
+
 
 .btn-st-bold{
   border: 2px solid var(--txt-secondary);
