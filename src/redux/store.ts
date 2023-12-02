@@ -3,6 +3,7 @@ import notificationReducer from "./features/notification/notificationSlice";
 import cartReducer from "./features/cart/cartSlice";
 import overlayReducer from "./features/overlay/overlaySlice";
 import loadingReducer from "./features/loading/loadingSlice";
+import userReducer from './features/user/userSlice';
 
 export const store = configureStore({
     reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
         cart: cartReducer,
         overlay: overlayReducer,
         loading:loadingReducer,
+        user: userReducer,
     },
 });
 

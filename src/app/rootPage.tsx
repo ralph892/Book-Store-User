@@ -10,12 +10,17 @@ import Footer from "@/components/Footer";
 import { useSelector } from "react-redux";
 import { IBook } from "@/interfaces/customInterface";
 import { Toaster } from "sonner";
+import Cookies from "js-cookie";
+import { handleRequestInformation } from "@/api/handleAuth";
+import { useDispatch } from "react-redux";
+import { assignUser } from "@/redux/features/user/userSlice";
 
 type Props = {
   children: React.ReactNode;
 };
 
 const RootPage = (props: Props) => {
+  const dispatch = useDispatch();
   const notificationState = useSelector(
     (state: RootState) => state.notification.isMounted
   );
@@ -31,6 +36,18 @@ const RootPage = (props: Props) => {
   );
   const [isLoading, setIsLoading] = React.useState(true);
   const [bookData, setBookData] = React.useState<IBook>();
+
+  React.useEffect(() => {
+    const authFunction = async () => {
+      if (Cookies.get("refreshToken")) {
+        const result = await handleRequestInformation();
+        if (result.response) {
+          dispatch(assignUser(result.response));
+        }
+      }
+    };
+    authFunction();
+  }, [Cookies.get("refreshToken")]);
 
   React.useEffect(() => {
     const notification = document.querySelector("#cartNotification_wrapper");

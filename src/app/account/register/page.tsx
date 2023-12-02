@@ -11,9 +11,9 @@ import {
   RiArrowRightLine,
   RiGoogleFill,
 } from "react-icons/ri";
-import { handleCreateUser } from "@/api/handleApi";
 import { IUser } from "@/interfaces/customInterface";
 import Link from "next/link";
+import { handleLoginByGoogle, handleSignUp } from "@/api/handleAuth";
 
 type Props = {};
 
@@ -67,10 +67,10 @@ const page = (props: Props) => {
       return errors;
     },
     onSubmit: async (values) => {
-      const result = await handleCreateUser(values as IUser);
+      const result = await handleSignUp(values as IUser);
       if (result !== undefined) {
         if (result.errors) {
-          toast.error(result.errors.message[0], {
+          toast.error(result.errors.message, {
             action: {
               label: "Cancel",
               onClick: () => {},
@@ -78,7 +78,9 @@ const page = (props: Props) => {
             position: "top-right",
             duration: 2000,
           });
-        } else window.location.assign("/account/login");
+        } else {
+          window.location.assign("/account/login");
+        }
       }
     },
   });
@@ -212,7 +214,12 @@ const page = (props: Props) => {
             <div className="form_section justify-between has-border">
               <div className="flex items-center gap-[10px]">
                 <span>Or Register by:</span>
-                <button className="btn-type-icon-only">
+                <button
+                  className="btn-type-icon-only"
+                  onClick={async () => {
+                    await handleLoginByGoogle();
+                  }}
+                >
                   <RiGoogleFill />
                 </button>
               </div>

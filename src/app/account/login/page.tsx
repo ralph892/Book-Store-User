@@ -9,6 +9,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { handleLogin } from "@/api/handleAuth";
 import { toast } from "sonner";
+import { assignUser } from "@/redux/features/user/userSlice";
 
 type Props = {};
 
@@ -32,15 +33,19 @@ const page = (props: Props) => {
     validateOnChange: false,
     onSubmit: async (values) => {
       const result = await handleLogin(values.email, values.password);
-      if (result.errors) {
-        toast.error(result.errors.message, {
-          action: {
-            label: "Cancel",
-            onClick: () => {},
-          },
-          position: "top-right",
-          duration: 2000,
-        });
+      if (result !== undefined) {
+        if (result.errors) {
+          toast.error(result.errors.message, {
+            action: {
+              label: "Cancel",
+              onClick: () => {},
+            },
+            position: "top-right",
+            duration: 2000,
+          });
+        } else {
+          window.location.assign("/");
+        }
       }
     },
   });
@@ -99,7 +104,10 @@ const page = (props: Props) => {
             <div className="form_section"></div>
             <div className="form_section justify-end has-border">
               <button className="btn-type-link">Forgot Password ?</button>
-              <button className="btn-primary btn-sz-xsmall btn-st-icon max-w-[200px] w-full">
+              <button
+                className="btn-primary btn-sz-xsmall btn-st-icon max-w-[200px] w-full"
+                type="submit"
+              >
                 Login <RiArrowRightLine />
               </button>
             </div>

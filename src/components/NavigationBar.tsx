@@ -11,13 +11,25 @@ import { useDispatch } from "react-redux";
 import { mountMiniCart } from "@/redux/features/cart/cartSlice";
 import { mountOverlay } from "@/redux/features/overlay/overlaySlice";
 import Link from "next/link";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+import { IUser } from "@/interfaces/customInterface";
+import { handleLogout } from "@/api/handleAuth";
+import { toast } from "sonner";
+import { assignUser } from "@/redux/features/user/userSlice";
 
 type Props = {};
 
 const NavigationBar = (props: Props) => {
   const dispatch = useDispatch();
+  const userState = useSelector((state: RootState) => state.user.information);
+  const [user, setUser] = React.useState<IUser>();
   const [quantities, setQuantities] = React.useState(0);
   const dropboxRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    if (userState !== undefined) setUser(userState);
+  }, [userState]);
 
   React.useEffect(() => {
     if (typeof window !== "undefined")
@@ -60,15 +72,45 @@ const NavigationBar = (props: Props) => {
               <ul className="navbar-menu has-dropbox">
                 <RiUserLine />
                 <div className="dropbox_wrapper" ref={dropboxRef}>
-                  <li className="dropbox">
-                    <ul>
-                      <Link href="/account/login">Login</Link>
-                    </ul>
-                    <ul>
-                      <Link href="/account/register">Register</Link>
-                    </ul>
-                    <ul>My cart</ul>
-                  </li>
+                  {user === undefined ? (
+                    <li className="dropbox">
+                      <ul>
+                        <Link href="/account/login">Login</Link>
+                      </ul>
+                      <ul>
+                        <Link href="/account/register">Register</Link>
+                      </ul>
+                      <ul>My cart</ul>
+                    </li>
+                  ) : (
+                    <li className="dropbox">
+                      <ul>
+                        <Link href="/account/information">Account</Link>
+                      </ul>
+                      <ul>
+                        <button
+                          onClick={async () => {
+                            const result: any = await handleLogout();
+                            if (result) {
+                              dispatch(assignUser(undefined));
+                              window.location.reload();
+                            } else {
+                              toast.error(result.errors.message, {
+                                action: {
+                                  label: "Cancel",
+                                  onClick: () => {},
+                                },
+                                position: "top-right",
+                                duration: 2000,
+                              });
+                            }
+                          }}
+                        >
+                          Logout
+                        </button>
+                      </ul>
+                    </li>
+                  )}
                 </div>
               </ul>
               <ul className="navbar-menu">
