@@ -41,8 +41,8 @@ const RootPage = (props: Props) => {
     const authFunction = async () => {
       if (Cookies.get("refreshToken")) {
         const result = await handleRequestInformation();
-        if (result.response) {
-          dispatch(assignUser(result.response));
+        if (result.response && result.response.length > 0) {
+          dispatch(assignUser(result.response[0]));
         }
       }
     };

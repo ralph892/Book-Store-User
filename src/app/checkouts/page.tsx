@@ -1,37 +1,128 @@
 "use client";
 import React from "react";
 import DefaultLayout from "../layouts/DefaultLayout";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { unmountLoading } from "@/redux/features/loading/loadingSlice";
 import {
   RiBankCardLine,
   RiLockLine,
   RiMoneyDollarBoxFill,
 } from "react-icons/ri";
-import { IBook } from "@/interfaces/customInterface";
+import { IBook, IUser } from "@/interfaces/customInterface";
 import Image from "next/image";
+import { handleGetCurrentCountry, handlePurchase } from "@/api/handleApi";
+import { toast } from "sonner";
+import * as Yup from "yup";
+import { useFormik } from "formik";
+import { RootState } from "@/redux/store";
 
 type Props = {};
 
 const page = (props: Props) => {
   const dispatch = useDispatch();
+  const userState = useSelector((state: RootState) => state.user.information);
+  const [userInfo, setUserInfo] = React.useState<IUser>();
   const [products, setProducts] = React.useState<IBook[]>([]);
   const [quantities, setQuantities] = React.useState<number[]>([]);
+  const [locationInfo, setLocationInfo] = React.useState<any>();
   const [total, setTotal] = React.useState(0);
   const hasExecutedEffect = React.useRef(0);
 
   React.useEffect(() => {
     dispatch(unmountLoading());
+    const fetchApi = async () => {
+      const result = await handleGetCurrentCountry();
+      if (result !== undefined) setLocationInfo(result);
+    };
+    fetchApi();
   }, []);
+
+  React.useEffect(() => {
+    if (userState !== undefined) {
+      setUserInfo(userState);
+    }
+  }, [userState]);
 
   React.useEffect(() => {
     updateProducts();
   });
 
+  const validateSchema = Yup.object().shape({
+    firstName: Yup.string()
+      .min(2, "To Short")
+      .max(50, "To Long")
+      .required("Required"),
+    lastName: Yup.string()
+      .min(2, "To Short")
+      .max(50, "To Long")
+      .required("Required"),
+    address: Yup.string()
+      .min(2, "To Short")
+      .max(50, "To Long")
+      .required("Required"),
+    email: Yup.string().email("Invalid email").required("Required"),
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      email: userInfo ? userInfo.email : "",
+      country: locationInfo !== undefined ? locationInfo.country : "",
+      firstName: userInfo ? userInfo.firstName : "",
+      lastName: userInfo ? userInfo.lastName : "",
+      address: userInfo ? userInfo.address : "",
+      phoneNumber: userInfo ? userInfo.phoneNumber : "",
+      city: locationInfo !== undefined ? locationInfo.city : "",
+      ward: "",
+      district: "",
+    },
+    enableReinitialize: true,
+    validationSchema: validateSchema,
+    validateOnChange: false,
+    onSubmit: async (values) => {
+      const response = await handlePurchase(products, quantities);
+      if (response !== undefined) {
+        if (response.errors) {
+          toast.error(response.errors, {
+            action: {
+              label: "Cancel",
+              onClick: () => {},
+            },
+            position: "top-right",
+            duration: 2000,
+          });
+        } else {
+          localStorage.clear();
+          toast.success("purchase successfully!", {
+            action: {
+              label: "Continue",
+              onClick: () => {
+                window.location.assign("/categories");
+              },
+            },
+            position: "top-center",
+            duration: 10000,
+          });
+        }
+      }
+    },
+  });
+
+  React.useEffect(() => {
+    if (formik.errors) {
+      if (formik.errors.firstName)
+        toast.error("First Name is " + formik.errors.firstName);
+      if (formik.errors.lastName)
+        toast.error("Last Name is " + formik.errors.lastName);
+      if (formik.errors.email) toast.error("Email is " + formik.errors.email);
+      if (formik.errors.address)
+        toast.error("Address is " + formik.errors.address);
+    }
+  }, [formik.errors]);
+
   const updateProducts = () => {
     if (hasExecutedEffect.current !== localStorage.length) {
       const storage = Object.keys(localStorage).filter(
-        (key) => key !== "ally-supports-cache" && key !== "total"
+        (key) => key !== "ally-supports-cache"
       );
       if (storage.length > 0) {
         setTotal(0);
@@ -53,16 +144,16 @@ const page = (props: Props) => {
         setQuantities([]);
         setTotal(0);
       }
-      localStorage.setItem("total", JSON.stringify(total));
       hasExecutedEffect.current = localStorage.length;
     }
   };
+
   return (
     <DefaultLayout>
       <div className="checkouts_wrapper bg-[var(--bg-secondary)]">
         <div className="w-1/12"></div>
         <div className="w-6/12 px-[26px]">
-          <form className="checkouts_form">
+          <form className="checkouts_form" onSubmit={formik.handleSubmit}>
             <div className="checkouts_form-information">
               <div className="w-full mb-[26px]">
                 <label className="form-label mb-[15px] block">
@@ -71,6 +162,8 @@ const page = (props: Props) => {
                 <input
                   className="form-input input-tertiary input-sz-xsmall mb-[10px]"
                   placeholder="Email or Mobile phone number"
+                  onChange={formik.handleChange}
+                  value={formik.values.email}
                 ></input>
                 <div className="flex items-center gap-[8px]">
                   <input type="checkbox" className="form-checkbox"></input>
@@ -88,6 +181,10 @@ const page = (props: Props) => {
                     placeholder="Country/Region"
                     className="input-custom input-sz-xsmall"
                     type="text"
+                    id="country"
+                    name="country"
+                    value={formik.values.country}
+                    onChange={formik.handleChange}
                   />
                   <label htmlFor="input-custom" className="input-custom-label">
                     Country/Region
@@ -101,6 +198,10 @@ const page = (props: Props) => {
                         placeholder="First name"
                         className="input-custom input-sz-xsmall"
                         type="text"
+                        name="firstName"
+                        id="firstName"
+                        value={formik.values.firstName}
+                        onChange={formik.handleChange}
                       />
                       <label
                         htmlFor="input-custom"
@@ -117,6 +218,10 @@ const page = (props: Props) => {
                         placeholder="Last name"
                         className="input-custom input-sz-xsmall"
                         type="text"
+                        id="lastName"
+                        name="lastName"
+                        value={formik.values.lastName}
+                        onChange={formik.handleChange}
                       />
                       <label
                         htmlFor="input-custom"
@@ -133,6 +238,10 @@ const page = (props: Props) => {
                     placeholder="Address"
                     className="input-custom input-sz-xsmall"
                     type="text"
+                    id="address"
+                    name="address"
+                    value={formik.values.address}
+                    onChange={formik.handleChange}
                   />
                   <label htmlFor="input-custom" className="input-custom-label">
                     Address
@@ -146,6 +255,10 @@ const page = (props: Props) => {
                         placeholder="City"
                         className="input-custom input-sz-xsmall"
                         type="text"
+                        name="city"
+                        id="city"
+                        value={formik.values.city}
+                        onChange={formik.handleChange}
                       />
                       <label
                         htmlFor="input-custom"
@@ -162,6 +275,10 @@ const page = (props: Props) => {
                         placeholder="Ward"
                         className="input-custom input-sz-xsmall"
                         type="text"
+                        id="ward"
+                        name="ward"
+                        value={formik.values.ward}
+                        onChange={formik.handleChange}
                       />
                       <label
                         htmlFor="input-custom"
@@ -178,6 +295,10 @@ const page = (props: Props) => {
                         placeholder="District"
                         className="input-custom input-sz-xsmall"
                         type="text"
+                        id="district"
+                        name="district"
+                        value={formik.values.district}
+                        onChange={formik.handleChange}
                       />
                       <label
                         htmlFor="input-custom"
@@ -211,6 +332,7 @@ const page = (props: Props) => {
                       <input
                         className="form-input input-tertiary input-sz-xsmall mb-[10px]"
                         placeholder="Card number"
+                        disabled
                       ></input>
                       <RiBankCardLine />
                     </div>
@@ -218,11 +340,13 @@ const page = (props: Props) => {
                       <input
                         className="form-input input-tertiary input-sz-xsmall mb-[10px] w-1/2"
                         placeholder="Expiration date (MM/YY)"
+                        disabled
                       ></input>
                       <div className="w-1/2 payment_body_section">
                         <input
                           className="form-input input-tertiary input-sz-xsmall mb-[10px]"
                           placeholder="Security code"
+                          disabled
                         ></input>
                         <RiLockLine />
                       </div>
@@ -231,13 +355,20 @@ const page = (props: Props) => {
                       <input
                         className="form-input input-tertiary input-sz-xsmall mb-[10px]"
                         placeholder="Name on card"
+                        disabled
                       ></input>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <button className="btn-sz-xmedium btn-primary">Pay Now</button>
+            <button
+              className="btn-sz-xmedium btn-primary"
+              type="submit"
+              // onClick={(e) => handleClickPurchase(e)}
+            >
+              Pay Now
+            </button>
           </form>
         </div>
         <div className="w-5/12 px-[15px] py-[27px] bg-[var(--bg-gray-light)]">

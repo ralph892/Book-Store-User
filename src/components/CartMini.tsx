@@ -29,7 +29,7 @@ const CartMini = (props: Props) => {
   const updateProducts = () => {
     if (hasExecutedEffect.current !== localStorage.length) {
       const storage = Object.keys(localStorage).filter(
-        (key) => key !== "ally-supports-cache" && key !== "total"
+        (key) => key !== "ally-supports-cache"
       );
       if (storage.length > 0) {
         setTotal(0);
@@ -51,7 +51,6 @@ const CartMini = (props: Props) => {
         setQuantities([]);
         setTotal(0);
       }
-      localStorage.setItem("total", JSON.stringify(total));
       hasExecutedEffect.current = localStorage.length;
     }
   };
@@ -71,7 +70,6 @@ const CartMini = (props: Props) => {
         setQuantities(q);
         setTotal(total + parseItem[0].price);
         localStorage.setItem(id, JSON.stringify(parseItem));
-        localStorage.setItem("total", JSON.stringify(total));
       }
     }
   };
@@ -87,7 +85,6 @@ const CartMini = (props: Props) => {
         setQuantities(q);
         setTotal(total - parseItem[0].price);
         localStorage.setItem(id, JSON.stringify(parseItem));
-        localStorage.setItem("total", JSON.stringify(total));
       }
     }
   };
@@ -111,7 +108,6 @@ const CartMini = (props: Props) => {
         setTotal(
           total - parseItem[0].price * prevCount + parseItem[0].price * +value
         );
-        localStorage.setItem("total", JSON.stringify(total));
         localStorage.setItem(id, JSON.stringify(parseItem));
       }
     }

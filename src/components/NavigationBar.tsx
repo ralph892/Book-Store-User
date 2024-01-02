@@ -34,9 +34,8 @@ const NavigationBar = (props: Props) => {
   React.useEffect(() => {
     if (typeof window !== "undefined")
       setQuantities(
-        Object.keys(localStorage).filter(
-          (key) => key !== "total" && key !== "ally-supports-cache"
-        ).length
+        Object.keys(localStorage).filter((key) => key !== "ally-supports-cache")
+          .length
       );
   });
 
