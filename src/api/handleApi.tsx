@@ -10,18 +10,38 @@ const instance = axios.create({
 // users
 export const handleCreateUser = async (data: IUser) => {
   try {
-    const result = await instance.post(`/users`, data);
-    return { response: result.data };
+    const response = await instance.post(`/users`, data);
+    return { response: response.data };
   } catch (error: any) {
     return { errors: error.response.data };
+  }
+};
+
+export const handleUpdateUser = async (
+  id: string,
+  data: {
+    firstName: string;
+    lastName: String;
+    address: string;
+  }
+) => {
+  try {
+    await handleRefreshToken();
+    const response = await instance.patch(`/users/specified/${id}`, data, {
+      headers: { Authorization: `Bearer ${Cookies.get("accessToken")}` },
+    });
+    if (response.data.error) throw new Error(response.data.error);
+    return { response: response.data };
+  } catch (error: any) {
+    return { error: error.message };
   }
 };
 
 // categories
 export const handleGetCategories = async () => {
   try {
-    const result = await instance.get("/categories");
-    return { response: result.data };
+    const response = await instance.get("/categories");
+    return { response: response.data };
   } catch (error: any) {
     return { errors: error.response.data };
   }
@@ -35,14 +55,16 @@ export const handleGetBooks = async (
 ) => {
   try {
     if (key && !limit) {
-      const result = await instance.get(`/books?${key}=${data}`);
-      return { response: result.data };
+      const response = await instance.get(`/books?${key}=${data}`);
+      return { response: response.data };
     } else if (limit && key) {
-      const result = await instance.get(`/books?${key}=${data}&limit=${limit}`);
-      return { response: result.data };
+      const response = await instance.get(
+        `/books?${key}=${data}&limit=${limit}`
+      );
+      return { response: response.data };
     } else {
-      const result = await instance.get("/books");
-      return { response: result.data };
+      const response = await instance.get("/books");
+      return { response: response.data };
     }
   } catch (error) {
     console.log(error);
@@ -51,8 +73,8 @@ export const handleGetBooks = async (
 
 export const handleGetBook = async (id?: string) => {
   try {
-    const result = await instance.get(`books/${id}`);
-    return { response: result.data };
+    const response = await instance.get(`books/${id}`);
+    return { response: response.data };
   } catch (error: any) {
     return { errors: error.response.data };
   }
@@ -61,16 +83,18 @@ export const handleGetBook = async (id?: string) => {
 export const handleGetNewRelease = async (limit?: number) => {
   try {
     if (limit) {
-      const result = await instance.get(`/books/new?limit=${limit}`);
-      return { response: result.data };
+      const response = await instance.get(`/books/new?limit=${limit}`);
+      return { response: response.data };
     } else {
-      const result = await instance.get(`/books/new`);
-      return { response: result.data };
+      const response = await instance.get(`/books/new`);
+      return { response: response.data };
     }
   } catch (error) {
     console.log(error);
   }
 };
+
+// cart
 
 export const handlePurchase = async (
   products: IBook[],
@@ -78,7 +102,7 @@ export const handlePurchase = async (
 ) => {
   try {
     await handleRefreshToken();
-    const result = await instance.post(
+    const response = await instance.post(
       "/carts",
       {
         cart_id: `CR${Date.now()}`,
@@ -91,10 +115,19 @@ export const handlePurchase = async (
         headers: { Authorization: `Bearer ${Cookies.get("accessToken")}` },
       }
     );
-    if (result.data.error) {
-      throw new Error(result.data.error);
+    if (response.data.error) {
+      throw new Error(response.data.error);
     }
-    return { response: result };
+    return { response: response };
+  } catch (error: any) {
+    return { errors: error.message };
+  }
+};
+
+export const handleGetCartDetail = async (user_id: string) => {
+  try {
+    const response = await instance.get(`/carts/detail/${user_id}`);
+    return { response: response.data };
   } catch (error: any) {
     return { errors: error.message };
   }

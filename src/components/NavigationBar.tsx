@@ -54,10 +54,14 @@ const NavigationBar = (props: Props) => {
           </div>
           <div className="navbar-categories_wrapper">
             <li className="navbar-categories">
-              <ul className="navbar-category active">Home</ul>
+              <ul className="navbar-category active">
+                <Link href="/">Home</Link>
+              </ul>
               <ul className="navbar-category">Products</ul>
               <ul className="navbar-category">Sale off</ul>
-              <ul className="navbar-category">Contact</ul>
+              <ul className="navbar-category">
+                <a href="#footer">Contact</a>
+              </ul>
               <ul className="navbar-category">
                 <Link href="/categories">Latest Categories</Link>
               </ul>
@@ -84,7 +88,7 @@ const NavigationBar = (props: Props) => {
                   ) : (
                     <li className="dropbox">
                       <ul>
-                        <Link href="/account/information">Account</Link>
+                        <Link href="/account/profile">Account</Link>
                       </ul>
                       <ul>
                         <button

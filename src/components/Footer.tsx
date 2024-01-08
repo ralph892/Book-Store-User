@@ -11,7 +11,7 @@ type Props = {};
 
 const Footer = (props: Props) => {
   return (
-    <div className="footer_wrapper">
+    <div className="footer_wrapper" id="footer">
       <div className="footer">
         <div className="footer_row">
           <div className="footer_col footer-primary">

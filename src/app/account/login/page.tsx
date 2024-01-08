@@ -9,7 +9,6 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { handleLogin } from "@/api/handleAuth";
 import { toast } from "sonner";
-import { assignUser } from "@/redux/features/user/userSlice";
 
 type Props = {};
 

@@ -30,6 +30,7 @@
   --cl-primary: #e3563d;
   --cl-secondary: #333;
   --bg-danger: rgb(255, 43, 43);
+  --bg-success: rgb(121, 255, 128);
   --txt-primary: white;
   --txt-secondary: #333333;
   --txt-gray: #54667a;
@@ -45,6 +46,7 @@
 
 html {
   @apply lg:text-[62.5%] md:text-[62.5%] text-[50%];
+  scroll-behavior: smooth !important;
   /* overflow: hidden; */
 }
 
@@ -155,6 +157,16 @@ html {
   transition: all ease-in-out 0.25s;
 
   &:hover{
+    @apply bg-[var(--txt-secondary)] text-[var(--txt-primary)];
+  }
+}
+
+.btn-success{
+  @apply bg-[var(--bg-success)] text-[var(--txt-secondary)];
+  border-radius: var(--border-radius-btn);
+  transition: all ease-in-out 0.25s;
+
+  &:hover {
     @apply bg-[var(--txt-secondary)] text-[var(--txt-primary)];
   }
 }
